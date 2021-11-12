@@ -5,12 +5,12 @@
 The objective of this project is to develop the game Snake. The snake eats square rats, and each time it eats square rats it grows. If it collides withit self or one of the walls, it dies and the game restarts. The player needs to make the snake grow as much as possible. Each time the snake eats square rats, the player is awarded points. These are the requirements of the game:
 
 
-- Bullet list Display game on built-in OLED graphical display.
-- Bullet list Snake moves across the screen in X and Y directions.
-- Bullet list The direction of the snake is changed when the buttons are pressed.
-- Bullet list Snake chases square rats, which, when eaten, increases the length ofthe snake and awards points to the player.
-- Bullet list Snake can collide with itself and walls, in which case the player loses.
-- Bullet list Display number of square rats eaten (score) when the game is over.
+- Display game on built-in OLED graphical display.
+- Snake moves across the screen in X and Y directions.
+- The direction of the snake is changed when the buttons are pressed.
+- Snake chases square rats, which, when eaten, increases the length ofthe snake and awards points to the player.
+- Snake can collide with itself and walls, in which case the player loses.
+- Display number of square rats eaten (score) when the game is over.
 
 ## Solution
 
