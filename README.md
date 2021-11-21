@@ -14,7 +14,7 @@ The objective of this project is to develop the game Snake. The snake eats squar
 
 ## Solution
 
-We will develop our project on the ChipKIT Uno32 board together with theBasic I/O shield. The game will be shown on the small display of the BasicI/O shield, and the push buttons will be used to move the snake in vertical and horizontal directions. The interrupts triggered by the built in timer will be used to update the screen. We will develop the game using MCB32tools and C.
+We will develop our project on the ChipKIT Uno32 board together with the Basic I/O shield. The game will be shown on the small display of the BasicI/O shield, and the push buttons will be used to move the snake in vertical and horizontal directions. The interrupts triggered by the built in timer will be used to update the screen. We will develop the game using MCB32tools and C.
 
 ## Verification
 
