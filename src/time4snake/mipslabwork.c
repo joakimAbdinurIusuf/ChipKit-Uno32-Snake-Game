@@ -31,18 +31,15 @@ char textstring[] = "text, more text, and even more text!";
 
 /* Interrupt Service Routine */
 void user_isr( void ) {
-    // Surprise
-    if (IFS(0) & 0x80000) {
-        IFS(0) = IFS(0) & 0xFFF7FFFF; // 0xFFFFFFF7
-        PORTE = PORTE + 1; // *porte + 1
-    }
+    /*
     
     // 3e)
     // Acknowledge interupts from Timer 2.
     
     // int elapsed = (IFS(0) & 0x100)>>8;
     // if(elapsed==1)
-        
+
+     
     if (IFS(0) & 0x100) {
         // reset 8th bit to 0, data sheet page 52
         IFS(0) = IFS(0) & 0xFFFFFEFF; // 0xFFFFFEFF
@@ -54,10 +51,12 @@ void user_isr( void ) {
             time2string( textstring, mytime );
             display_string( 3, textstring );
             display_update();
+            display_image(96, icon);
             tick( &mytime );
             timeoutcount = 0;
         }
     }
+    */
 }
 
 /* Lab-specific initialization goes here */
@@ -100,9 +99,10 @@ void labinit( void )
 
 /* This function is called repetitively from the main program */
 void labwork( void ) {
-  prime = nextprime( prime );
-  display_string( 0, itoaconv( prime ) );
+  // prime = nextprime( prime );
+  //display_string( 0, itoaconv( prime ) );
   display_update();
+  display_image(0, icon);
 }
 
 /*
