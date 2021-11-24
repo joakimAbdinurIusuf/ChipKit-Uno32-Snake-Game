@@ -58,12 +58,11 @@ int main(void) {
 	display_update();
 	display_image(0, icon);
 	
-	labinit(); /* Do any lab-specific initialization */
+	initializeGame(); // Do any game-specific initialization 
 
 	while( 1 )
 	{
-	  // labwork(); /* Do lab-specific things again and again */
-	  display_image(0, icon);
+	  playGame(); // Game loop
 	}
 	return 0;
 }
