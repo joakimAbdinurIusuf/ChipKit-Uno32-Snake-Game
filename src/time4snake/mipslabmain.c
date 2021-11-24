@@ -55,14 +55,13 @@ int main(void) {
 	SPI2CONSET = 0x8000;
 	
 	display_init();
-	display_update();
 	display_image(0, icon);
 	
-	initializeGame(); // Do any game-specific initialization 
+	labinit(); // Do any game-specific initialization 
 
 	while( 1 )
 	{
-	  playGame(); // Game loop
+	  labwork(); // Game loop
 	}
 	return 0;
 }

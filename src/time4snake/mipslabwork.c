@@ -29,7 +29,7 @@ void user_isr( void ) {
 }
 
 /* Lab-specific initialization goes here */
-void initializeGame( void )
+void labinit( void )
 {
   // 1c) 
   volatile int* trise = (volatile int*) 0xbf886100; 
@@ -67,7 +67,6 @@ void initializeGame( void )
 }
 
 /* This function is called repetitively from the main program */
-void playGame( void ) {
-  display_update();
+void labwork( void ) {
   display_image(0, icon);
 }
