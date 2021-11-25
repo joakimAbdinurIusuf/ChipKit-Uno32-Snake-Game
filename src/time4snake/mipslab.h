@@ -37,10 +37,14 @@ void display_debug( volatile int * const addr );
 
 /* Declare bitmap array containing font */
 extern const uint8_t const font[128*8];
-/* Declare bitmap array containing icon */
-extern const uint8_t const icon[128*4];
+
 /* Declare text buffer for display output */
 extern char textbuffer[4][16];
+
+
+/* Declare bitmap array for the screen */    //Ändrad från icon
+extern uint8_t screen[128*4];
+
 
 /* Declare functions written by students.
    Note: Since we declare these functions here,
