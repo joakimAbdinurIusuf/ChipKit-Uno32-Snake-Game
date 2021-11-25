@@ -11,6 +11,24 @@
 char textbuffer[4][16];
 
 
+/*
+Each bit in this array represents one square/block in the snake game, where each block is 4x4 pixels big,
+creating an 8 x 32 grid of blocks.
+*/
+uint8_t gameField = {		
+	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+}
+
+
+/*
+One snakeblock represents one unit (pixel) in the game field, but is 4x4 pixels on the display (screen)
+*/
+uint8_t snakeBlock = {		
+	0x0, 0x0, 0x0, 0x0,
+};
+
+
+
 uint8_t screen[] = {
 	0, 0, 0, 0, 0, 0, 0, 0,
 	255, 255, 255, 255, 255, 255, 255, 255,
