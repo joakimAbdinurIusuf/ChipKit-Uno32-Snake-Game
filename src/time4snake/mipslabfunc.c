@@ -23,6 +23,36 @@ static void num32asc( char * s, int );
 #define DISPLAY_TURN_OFF_VDD (PORTFSET = 0x40)
 #define DISPLAY_TURN_OFF_VBAT (PORTFSET = 0x20)
 
+
+drawBlock(int fieldx, int fieldy){
+
+  if(fieldx<32) {
+    int dispx = field * 4
+
+    if(fieldy<1){
+
+      for(int i=dispx, int j=0; i<dispx+4; i++, j++){
+        screen[i] = (screen[i] & 0xf0) | snakeBlock[j];
+      }
+    }
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /* quicksleep:
    A simple function to create a small delay.
    Very inefficient use of computing resources,
