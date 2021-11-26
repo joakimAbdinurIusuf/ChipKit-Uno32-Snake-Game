@@ -27,11 +27,13 @@ static void num32asc( char * s, int );
 drawBlock(int fieldx, int fieldy){
 
   if(fieldx<32) {
-    int dispx = field * 4
+    int dispx = fieldx * 4;
 
     if(fieldy<1){
+      int i = dispx;
+      int j = 0;
 
-      for(int i=dispx, int j=0; i<dispx+4; i++, j++){
+      for( i=dispx, j=0; i<dispx+4; i++, j++){
         screen[i] = (screen[i] & 0xf0) | snakeBlock[j];
       }
     }
