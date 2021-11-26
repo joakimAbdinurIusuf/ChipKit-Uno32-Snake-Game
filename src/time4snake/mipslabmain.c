@@ -55,7 +55,7 @@ int main(void) {
 	SPI2CONSET = 0x8000;
 	
 	display_init();
-	display_image(0, icon);
+	display_image(0, screen);
 	
 	labinit(); // Do any game-specific initialization 
 
