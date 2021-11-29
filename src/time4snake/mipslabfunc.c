@@ -26,7 +26,7 @@ static void num32asc( char * s, int );
 /* Egna functioner  */
 
 void changePixel(int x, int y, int value){
-  int row = (y >> 3) - 1; //row 0-3 on the display
+  int row = y/8; //row 0-3  on the display
 
 /* Equal to this:
   if(y<8){        row=0;
