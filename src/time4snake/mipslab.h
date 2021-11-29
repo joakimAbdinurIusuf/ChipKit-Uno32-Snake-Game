@@ -20,6 +20,8 @@ void labwork(void);
 int nextprime( int inval );
 void quicksleep(int cyc);
 void tick( unsigned int * timep );
+void clearScreen(void);
+void drawBlock(int fieldX, int fieldY);
 
 /* Declare display_debug - a function to help debugging.
 
