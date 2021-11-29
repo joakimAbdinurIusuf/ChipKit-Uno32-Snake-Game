@@ -25,6 +25,28 @@ static void num32asc( char * s, int );
 
 /* Egna functioner  */
 
+void changePixel(int x, int y, int value){
+  int row = (y >> 3) - 1; //row 0-3 on the display
+
+/* Equal to this:
+  if(y<8){        row=0;
+  if (8<=y<16){   row=1;
+  if (16<=y<24){  row=2;
+  if (24<=y<32){  row=3;
+  }
+  */
+  uint8_t modifier = 1 << y%8; //one bit is 1, the rest is 0
+
+  if(value){  //if value is not zero (pixel will be black)
+    int i = x + row * 128;  // convert x coordinate to index in the screen array
+    screen[i] = screen[i] | modifier;   //sets one bit to 1
+
+  } else {  //if value is zero (pixel will be white)
+    screen[i] = screen[i] & ~modifier;  //sets one bit to 0
+  }
+}
+
+
 /*
 Clear the screen by setting each pixel of the display to 1.
 */
