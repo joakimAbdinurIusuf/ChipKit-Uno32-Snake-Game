@@ -33,7 +33,7 @@ drawBlock(int fieldx, int fieldy){
       int i = dispx;
       int j = 0;
 
-      for( i=dispx, j=0; i<dispx+4; i++, j++){
+      for(i=dispx, j=0; i<dispx+4; i++, j++){
         screen[i] = (screen[i] & 0xf0) | snakeBlock[j];
       }
     }
