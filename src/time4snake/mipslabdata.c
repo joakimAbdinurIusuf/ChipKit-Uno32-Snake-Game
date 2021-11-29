@@ -24,7 +24,7 @@ uint8_t gameField[] = {
 One snakeblock represents one unit (pixel) in the game field, but is 4x4 pixels on the display (screen)
 */
 uint8_t snakeBlock[] = {	// 4 most significant bits should always be 0 (?) 		
-	0xf0, 0x00, 0xf0, 0x00,
+	0x0f, 0x00, 0x0f, 0x00,
 };
 
 
