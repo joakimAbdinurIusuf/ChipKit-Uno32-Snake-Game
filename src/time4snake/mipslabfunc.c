@@ -23,6 +23,17 @@ static void num32asc( char * s, int );
 #define DISPLAY_TURN_OFF_VDD (PORTFSET = 0x40)
 #define DISPLAY_TURN_OFF_VBAT (PORTFSET = 0x20)
 
+/* Egna functioner  */
+
+/*
+Clear the screen by setting each pixel of the display to 1.
+*/
+void clearScreen(void) {
+  int i = 0;
+  for (i = 0; i < 512; i++) {
+    screen[i] = 255;
+  }
+}
 
 drawBlock(int fieldx, int fieldy){
 
