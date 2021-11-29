@@ -36,9 +36,9 @@ void changePixel(int x, int y, int value){
   }
   */
   uint8_t modifier = 1 << y%8; //one bit is 1, the rest is 0
+  int i = x + row * 128;  // convert x coordinate to index in the screen array
 
   if(value){  //if value is not zero (pixel will be black)
-    int i = x + row * 128;  // convert x coordinate to index in the screen array
     screen[i] = screen[i] | modifier;   //sets one bit to 1
 
   } else {  //if value is zero (pixel will be white)
