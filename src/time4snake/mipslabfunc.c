@@ -35,7 +35,7 @@ void clearScreen(void) {
   }
 }
 
-drawBlock(int fieldx, int fieldy){
+void drawBlock(int fieldx, int fieldy){
 
   if(fieldx<32) {
     int dispx = fieldx * 4;
