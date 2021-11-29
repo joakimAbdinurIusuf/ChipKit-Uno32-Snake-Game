@@ -68,6 +68,7 @@ void labinit( void )
 
 /* This function is called repetitively from the main program */
 void labwork( void ) {
+  // clearScreen();
   drawBlock(1, 0);
   display_image(0, screen);
 }
