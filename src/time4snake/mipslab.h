@@ -22,6 +22,7 @@ void quicksleep(int cyc);
 void tick( unsigned int * timep );
 void clearScreen(void);
 void drawBlock(int fieldX, int fieldY);
+void changePixel(int x, int y, int value);
 
 /* Declare display_debug - a function to help debugging.
 
