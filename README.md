@@ -2,7 +2,7 @@
 
 ## Objective and Requirements
 
-The objective of this project is to develop the game Snake. The snake eats square rats, and each time it eats square rats it grows. If it collides withit self or one of the walls, it dies and the game restarts. The player needs to make the snake grow as much as possible. Each time the snake eats square rats, the player is awarded points. These are the requirements of the game:
+The objective of this project is to develop the game Snake. The snake eats square rats, and each time it eats square rats it grows. If it collides with it self or one of the walls, it dies and the game restarts. The player needs to make the snake grow as much as possible. Each time the snake eats square rats, the player is awarded points. These are the requirements of the game:
 
 
 - Display game on built-in OLED graphical display.
