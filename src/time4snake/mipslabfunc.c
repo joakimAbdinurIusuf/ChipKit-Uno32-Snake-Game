@@ -25,16 +25,28 @@ static void num32asc( char * s, int );
 
 /* Egna functioner  */
 
+/*
+Clear the screen by setting each pixel of the display to 1.
+*/
+void clearScreen(void) {
+  int i = 0;
+  for (i = 0; i < 512; i++) {
+    screen[i] = 255;
+  }
+}
+
+/*
+Mark individual pixels on the OLED display.
+
+The code below is equal to:
+- if(y<8)        row=0;
+- if (8<=y<16)   row=1;
+- if (16<=y<24)  row=2;
+- if (24<=y<32)  row=3;
+*/
 void changePixel(int x, int y, int value){
   int row = y/8; //row 0-3  on the display
 
-/* Equal to this:
-  if(y<8){        row=0;
-  if (8<=y<16){   row=1;
-  if (16<=y<24){  row=2;
-  if (24<=y<32){  row=3;
-  }
-  */
   uint8_t modifier = 1 << y%8; //one bit is 1, the rest is 0
   int i = x + row * 128;  // convert x coordinate to index in the screen array
 
@@ -46,29 +58,12 @@ void changePixel(int x, int y, int value){
   }
 }
 
-
-/*
-Clear the screen by setting each pixel of the display to 1.
-*/
-void clearScreen(void) {
-  int i = 0;
-  for (i = 0; i < 512; i++) {
-    screen[i] = 255;
-  }
-}
-
-void drawBlock(int fieldx, int fieldy){
-
-  if(fieldx<32) {
-    int dispx = fieldx * 4;
-
-    if(fieldy<1){
-      int i = dispx;
-      int j = 0;
-
-      for(i=dispx, j=0; i<dispx+4; i++, j++){
-        screen[i] = (screen[i] & 0xf0) | snakeBlock[j];
-      }
+void drawBlock(int fieldx, int fieldy) {
+  int xPos;
+  int yPos;
+  for (xPos = fieldx; xPos < fieldx + 4; xPos++) {
+    for (yPos = fieldy; yPos < fieldy + 4; yPos++) {
+      changePixel(xPos, yPos, 0);
     }
   }
 }
