@@ -59,11 +59,14 @@ void changePixel(int x, int y, int value){
 }
 
 void drawBlock(int fieldx, int fieldy) {
-  int xPos;
-  int yPos;
-  for (xPos = fieldx; xPos < fieldx + 4; xPos++) {
-    for (yPos = fieldy; yPos < fieldy + 4; yPos++) {
-      changePixel(xPos, yPos, 0);
+  // make sure block is within the OLED display 
+  if (fieldx >= 0 && fieldx < 125 && fieldy >= 0 && fieldy < 29) { 
+    int xPos;
+    int yPos;
+    for (xPos = fieldx; xPos < fieldx + 4; xPos++) {
+      for (yPos = fieldy; yPos < fieldy + 4; yPos++) {
+        changePixel(xPos, yPos, 0);
+      }
     }
   }
 }
