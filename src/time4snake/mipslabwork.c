@@ -15,10 +15,15 @@
 #include <pic32mx.h>  /* Declarations of system-specific addresses etc */
 #include "mipslab.h"  /* Declatations for these labs */
 
+#define width 32
+#define height 8
+
 /* Global variables */
 int mytime = 0x5957;
 
 char textstring[] = "text, more text, and even more text!";
+
+int snakeField[width][height], xCoord, yCoord, temp, head, tail; 
 
 // 1d) porte is used in more than one function.
 // volatile int = (volatile int*) 0xbf886110; // 0xbf886110
@@ -66,9 +71,47 @@ void labinit( void )
   return;
 }
 
+// Divide the 2D snake array into 32x8 blocks, each being 4x4 pixels?
+void initializeSnake(void) {
+  int i, j;
+  for (i = 0; i < width; i++) {
+    for (j = 0; i < height; j++) {
+      snakeField[i][j] = 0;
+    }
+  }
+
+  xCoord = width/2; 
+  yCoord = height/2; 
+  temp = yCoord;
+  head = 5;
+  tail = 1;
+
+  for (i = 0; i < head; i++) {
+    temp++;
+    snakeField[xCoord][temp - head] = i + 1;
+  }
+}
+
 /* This function is called repetitively from the main program */
 void labwork( void ) {
   // clearScreen();
-  drawBlock(124, 28);
+  
+  int i, j;
+  for (i = 0; i < width; i++) {
+    for (j = 0; j < height; j++) {
+      // BUG: if snakeField[i][j] == 0 everything is white
+      // so obiously snakeField[xCoord][temp - head] = i + 1; above isn't working
+      // or something else is going on
+      if (snakeField[i][j] > 0) { 
+        drawBlock(i*4, j*4);
+      }
+    }
+  }
+  
+  int v = 31;
+  int b = 7;
+  drawBlock(v*4, b*4); // equal to drawBlock(124, 28);
+  // drawBlock(124, 28);
+
   display_image(0, screen);
 }

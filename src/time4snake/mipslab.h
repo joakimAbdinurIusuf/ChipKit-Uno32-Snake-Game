@@ -23,6 +23,7 @@ void tick( unsigned int * timep );
 void clearScreen(void);
 void drawBlock(int fieldX, int fieldY);
 void changePixel(int x, int y, int value);
+void initializeSnake(void);
 
 /* Declare display_debug - a function to help debugging.
 

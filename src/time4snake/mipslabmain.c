@@ -59,6 +59,8 @@ int main(void) {
 	
 	labinit(); // Do any game-specific initialization 
 
+	initializeSnake();
+
 	while( 1 )
 	{
 	  labwork(); // Game loop
