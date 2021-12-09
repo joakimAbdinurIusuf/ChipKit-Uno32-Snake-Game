@@ -23,7 +23,7 @@ int mytime = 0x5957;
 
 char textstring[] = "text, more text, and even more text!";
 
-int snakeArray[height][width], xPos, yPos, snakeBody, head, tail; 
+int snakeArray[height][width], xPos, yPos, temp, head, tail; 
 
 // 1d) porte is used in more than one function.
 // volatile int = (volatile int*) 0xbf886110; // 0xbf886110
@@ -71,31 +71,33 @@ void labinit( void )
   return;
 }
 
-// Divide the 2D snake array into 32x8 blocks, each being 4x4 pixels?
-void initializeSnake(void) {
+void setAllElementsOfSnakeArrayToZero(void) {
   int i, j;
   for (i = 0; i < height; i++) {
     for (j = 0; j < width; j++) {
       snakeArray[i][j] = 0;
     }
   }
+}
+
+// Divide the 2D snake array into 32x8 blocks, each being 4x4 pixels?
+void initializeSnake(void) {
+  setAllElementsOfSnakeArrayToZero();
 
   xPos= width/2; 
   yPos = height/2; 
-  snakeBody = yPos;
-  head = 3;
+  temp = xPos;
+  head = 5;
   tail = 1;
 
+  int i;
   for (i = 0; i < head; i++) {
-    snakeBody++;
-    snakeArray[xPos][snakeBody - head] = i + 1;
+    temp++;
+    snakeArray[yPos][temp - head] = i + 1;
   }
 }
 
-/* This function is called repetitively from the main program */
-void labwork( void ) {
-  clearScreen();
-  
+void drawSnake(void) {
   int i, j;
   for (i = 0; i < height; i++) {
     for (j = 0; j < width; j++) {
@@ -104,11 +106,25 @@ void labwork( void ) {
       }
     }
   }
-  
-  int v = 7;
-  int b = 31;
-  drawBlock(v*4, b*4); // equal to drawBlock(124, 28);
-  // drawBlock(124, 28);
+}
+
+void testFunction(void) {
+  xPos++; 
+  head++;
+  snakeArray[yPos][xPos] = head;
+}
+
+/* This function is called repetitively from the main program */
+void labwork( void ) {
+  clearScreen();
+  drawSnake();
+
+  // Clicking BTN3 should add a block to the right of the initialized snake
+  if ((getbtns() >> 1) & 0x1) {
+    xPos++;
+    head++;
+    snakeArray[yPos][xPos] = head;
+  }
 
   display_image(0, screen);
 }
