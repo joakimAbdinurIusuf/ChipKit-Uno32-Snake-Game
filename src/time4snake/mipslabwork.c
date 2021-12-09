@@ -15,15 +15,15 @@
 #include <pic32mx.h>  /* Declarations of system-specific addresses etc */
 #include "mipslab.h"  /* Declatations for these labs */
 
-#define width 32
 #define height 8
+#define width 32
 
 /* Global variables */
 int mytime = 0x5957;
 
 char textstring[] = "text, more text, and even more text!";
 
-int snakeArray[width][height], xCoord, yCoord, snakeBody, head, tail; 
+int snakeArray[height][width], xPos, yPos, snakeBody, head, tail; 
 
 // 1d) porte is used in more than one function.
 // volatile int = (volatile int*) 0xbf886110; // 0xbf886110
@@ -74,21 +74,21 @@ void labinit( void )
 // Divide the 2D snake array into 32x8 blocks, each being 4x4 pixels?
 void initializeSnake(void) {
   int i, j;
-  for (i = 0; i < width; i++) {
-    for (j = 0; j < height; j++) {
+  for (i = 0; i < height; i++) {
+    for (j = 0; j < width; j++) {
       snakeArray[i][j] = 0;
     }
   }
 
-  xCoord = 0; 
-  yCoord = 7; 
-  snakeBody = yCoord;
+  xPos= width/2; 
+  yPos = height/2; 
+  snakeBody = yPos;
   head = 3;
   tail = 1;
 
   for (i = 0; i < head; i++) {
     snakeBody++;
-    snakeArray[xCoord][snakeBody - head] = i + 1;
+    snakeArray[xPos][snakeBody - head] = i + 1;
   }
 }
 
@@ -97,19 +97,16 @@ void labwork( void ) {
   clearScreen();
   
   int i, j;
-  for (i = 0; i < width; i++) {
-    for (j = 0; j < height; j++) {
-      // BUG: if snakeArray[i][j] == 0 everything is white
-      // so obiously snakeArray[xCoord][snakeBody - head] = i + 1; above isn't working
-      // or something else is going on
+  for (i = 0; i < height; i++) {
+    for (j = 0; j < width; j++) {
       if (snakeArray[i][j] > 0) { 
         drawBlock(i*4, j*4);
       }
     }
   }
   
-  int v = 31;
-  int b = 7;
+  int v = 7;
+  int b = 31;
   drawBlock(v*4, b*4); // equal to drawBlock(124, 28);
   // drawBlock(124, 28);
 

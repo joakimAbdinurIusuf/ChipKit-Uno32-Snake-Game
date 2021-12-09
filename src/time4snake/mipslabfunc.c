@@ -58,14 +58,14 @@ void changePixel(int x, int y, int value){
   }
 }
 
-void drawBlock(int fieldx, int fieldy) {
+void drawBlock(int row, int column) {
   // make sure block is within the OLED display 
-  if (fieldx >= 0 && fieldx < 125 && fieldy >= 0 && fieldy < 29) { 
-    int xCoordinate;
-    int yCoordinate;
-    for (xCoordinate = fieldx; xCoordinate < fieldx + 4; xCoordinate++) {
-      for (yCoordinate = fieldy; yCoordinate < fieldy + 4; yCoordinate++) {
-        changePixel(xCoordinate, yCoordinate, 0);
+  if (row >= 0 && row < 29 && column >= 0 && column < 125) { 
+    int yRow;
+    int xColumn;
+    for (yRow = row; yRow < row + 4; yRow++) {
+      for (xColumn = column; xColumn < column + 4; xColumn++) {
+        changePixel(xColumn, yRow, 0);
       }
     }
   }
