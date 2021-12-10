@@ -23,7 +23,11 @@ int mytime = 0x5957;
 
 char textstring[] = "text, more text, and even more text!";
 
-int snakeArray[height][width], xPos, yPos, temp, head, tail; 
+int snakeArray[height][width], xPos, yPos, temp, head, tail, direction; 
+
+/*
+Direction 
+*/
 
 // 1d) porte is used in more than one function.
 // volatile int = (volatile int*) 0xbf886110; // 0xbf886110
@@ -65,6 +69,7 @@ void initializeSnake(void) {
   temp = xPos;
   head = 5;
   tail = 1;
+  direction = 2; // initiate direction to be right (0 = left, 1 = up, 2 = right, 3 = down)
 
   int i;
   for (i = 0; i < head; i++) {
@@ -84,27 +89,115 @@ void drawSnake(void) {
   }
 }
 
+void removeTail(void) {
+  int i, j;
+  for (i = 0; i < height; i++) {
+    for (j = 0; j < width; j++) {
+      if (snakeArray[i][j] == tail) { 
+        snakeArray[i][j] = 0;
+      }
+    }
+  }
+  tail++;
+}
+
+void moveLeft(void) {
+  xPos--;
+  head++;
+  snakeArray[yPos][xPos] = head;
+
+  if (xPos < 0 || xPos > 31) {
+    delay(1000);
+    initializeSnake();
+  }
+}
+
+void moveRight(void) {
+  xPos++;
+  head++;
+  snakeArray[yPos][xPos] = head;
+
+  if (xPos < 0 || xPos > 31) {
+    delay(1000);
+    initializeSnake();
+  }
+}
+
+void moveUp(void) {
+  yPos--;
+  head++;
+  snakeArray[yPos][xPos] = head;
+
+  if (yPos < 0 || yPos > 7) {
+    delay(1000);
+    initializeSnake();
+  }
+}
+
+void moveDown(void) {
+  yPos++;
+  head++;
+  snakeArray[yPos][xPos] = head;
+
+  if (yPos < 0 || yPos > 7) {
+    delay(1000);
+    initializeSnake();
+  }
+}
+
 void moveSnake(void) {
-  if ((getbtns() >> 2) & 0x1) {
-    xPos--;
-    head++;
-    snakeArray[yPos][xPos] = head;
-  } else if ((getbtns() >> 1) & 0x1) {
-    xPos++;
-    head++;
-    snakeArray[yPos][xPos] = head;
-  } else if (getbtns() & 0x1) {
-    yPos--;
-    head++;
-    snakeArray[yPos][xPos] = head;
+  int BTN4 = (getbtns() >> 2) & 0x1;
+  int BTN3 = (getbtns() >> 1) & 0x1;
+
+  if (direction == 0) { // left
+    if (BTN4) {
+      moveDown();
+      direction = 3;
+    } else if (BTN3) {
+      moveUp();
+      direction = 1;
+    } else {
+      moveLeft();
+    }
+  } else if (direction == 1) { // up
+    if (BTN4) {
+      moveLeft();
+      direction = 0;
+    } else if (BTN3) {
+      moveRight();
+      direction = 2;
+    } else {
+      moveUp();
+    }
+  } else if (direction == 2) { // right
+    if (BTN4) {
+      moveUp();
+      direction = 1;
+    } else if (BTN3) {
+      moveDown();
+      direction = 3;
+    } else {
+      moveRight();
+    }
+  } else if (direction == 3) { // down
+    if (BTN4) {
+      moveLeft();
+      direction = 0;
+    } else if (BTN3) {
+      moveRight();
+      direction = 2;
+    } else {
+      moveDown();
+    }
   }
 }
 
 /* This function is called repetitively from the main program */
 void labwork( void ) {
-  delay(130);
+  delay(300);
   clearScreen();
-  drawSnake();
   moveSnake();
+  removeTail();
+  drawSnake();
   display_image(0, screen);
 }
