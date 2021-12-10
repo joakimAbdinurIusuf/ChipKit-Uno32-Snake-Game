@@ -26,7 +26,7 @@ void drawBlock(int fieldX, int fieldY);
 void changePixel(int x, int y, int value);
 void initializeSnake(void);
 void drawSnake(void);
-void testFunction(void);
+void moveSnake(void);
 
 /* Declare display_debug - a function to help debugging.
 
