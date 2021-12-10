@@ -105,39 +105,31 @@ void moveLeft(void) {
   xPos--;
   head++;
   snakeArray[yPos][xPos] = head;
-
-  if (xPos < 0 || xPos > 31) {
-    delay(1000);
-    initializeSnake();
-  }
 }
 
 void moveRight(void) {
   xPos++;
   head++;
   snakeArray[yPos][xPos] = head;
-
-  if (xPos < 0 || xPos > 31) {
-    delay(1000);
-    initializeSnake();
-  }
 }
 
 void moveUp(void) {
   yPos--;
   head++;
   snakeArray[yPos][xPos] = head;
-
-  if (yPos < 0 || yPos > 7) {
-    delay(1000);
-    initializeSnake();
-  }
 }
 
 void moveDown(void) {
   yPos++;
   head++;
   snakeArray[yPos][xPos] = head;
+}
+
+void checkGameOver(void) {
+  if (xPos < 0 || xPos > 31) {
+    delay(1000);
+    initializeSnake();
+  }
 
   if (yPos < 0 || yPos > 7) {
     delay(1000);
@@ -197,6 +189,7 @@ void labwork( void ) {
   delay(300);
   clearScreen();
   moveSnake();
+  checkGameOver();
   removeTail();
   drawSnake();
   display_image(0, screen);
