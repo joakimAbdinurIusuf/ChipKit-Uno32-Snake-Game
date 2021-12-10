@@ -170,10 +170,10 @@ void moveSnake(void) {
   } else if (direction == 3) { // down
     if (BTN4) {
       moveRight();
-      direction = 0;
+      direction = 2;
     } else if (BTN3) {
       moveLeft();
-      direction = 2;
+      direction = 0;
     } else {
       moveDown();
     }
@@ -198,8 +198,8 @@ void labwork( void ) {
   clearScreen();
   moveSnake();
   checkGameOver();
-  rat();
   removeTail();
+  rat();
   drawSnake();
   
   display_image(0, screen);
