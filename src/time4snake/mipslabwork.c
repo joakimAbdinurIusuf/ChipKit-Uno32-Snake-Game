@@ -69,6 +69,7 @@ void initializeSnake(void) {
   temp = xPos;
   head = 5;
   tail = 1;
+  direction = 2; // initiate direction to be right (0 = left, 1 = up, 2 = right, 3 = down)
 
   int i;
   for (i = 0; i < head; i++) {
@@ -113,24 +114,51 @@ void moveDown(void) {
 }
 
 void moveSnake(void) {
-  if ((getbtns() >> 2) & 0x1) {
-    xPos--;
-    head++;
-    snakeArray[yPos][xPos] = head;
-  } else if ((getbtns() >> 1) & 0x1) {
-    xPos++;
-    head++;
-    snakeArray[yPos][xPos] = head;
-  } else if (getbtns() & 0x1) {
-    yPos--;
-    head++;
-    snakeArray[yPos][xPos] = head;
+  int BTN4 = (getbtns() >> 2) & 0x1;
+  int BTN3 = (getbtns() >> 1) & 0x1;
+
+  if (direction == 0) { // left
+    moveLeft();
+    if (BTN4) {
+      moveDown();
+      direction = 3;
+    } else if (BTN3) {
+      moveUp();
+      direction = 1;
+    }
+  } else if (direction == 1) { // up
+    moveUp();
+    if (BTN4) {
+      moveLeft();
+      direction = 0;
+    } else if (BTN3) {
+      moveRight();
+      direction = 2;
+    }
+  } else if (direction == 2) { // right
+    moveRight();
+    if (BTN4) {
+      moveUp();
+      direction = 1;
+    } else if (BTN3) {
+      moveDown();
+      direction = 3;
+    }
+  } else if (direction == 3) { // down
+    moveDown();
+    if (BTN4) {
+      moveLeft();
+      direction = 0;
+    } else if (BTN3) {
+      moveRight();
+      direction = 2;
+    }
   }
 }
 
 /* This function is called repetitively from the main program */
 void labwork( void ) {
-  delay(130);
+  delay(1000);
   clearScreen();
   drawSnake();
   moveSnake();
