@@ -100,24 +100,28 @@ void removeTail(void) {
 void moveLeft(void) {
   xPos--;
   head++;
+  checkRat();
   snakeArray[yPos][xPos] = head;
 }
 
 void moveRight(void) {
   xPos++;
   head++;
+  checkRat();
   snakeArray[yPos][xPos] = head;
 }
 
 void moveUp(void) {
   yPos--;
   head++;
+  checkRat();
   snakeArray[yPos][xPos] = head;
 }
 
 void moveDown(void) {
   yPos++;
   head++;
+  checkRat();
   snakeArray[yPos][xPos] = head;
 }
 
@@ -125,11 +129,15 @@ void checkGameOver(void) {
   if (xPos < 0 || xPos > 31) {
     delay(1000);
     initializeSnake();
+    ratExists=0;
+    rat();
   }
 
   if (yPos < 0 || yPos > 7) {
     delay(1000);
     initializeSnake();
+    ratExists=0;
+    rat();
   }
 }
 
@@ -182,12 +190,19 @@ void moveSnake(void) {
 
 void rat(){
   while(!ratExists){
-    int xRat = rand() % 128; // add time function later?
-    int yRat = rand() % 32;
-    if(snakeArray[xRat][yRat]==0){
-      snakeArray[xRat][yRat]=-1;
+    int xRat = rand() % 32; // add time function later?
+    int yRat = rand() % 8;
+    if(snakeArray[yRat][xRat]==0){
+      snakeArray[yRat][xRat]=-1;
       ratExists=1;
     }
+  }
+}
+
+void checkRat(){
+  if(snakeArray[yPos][xPos]==-1){
+    ratExists=0;
+    rat();
   }
 }
 
@@ -199,7 +214,7 @@ void labwork( void ) {
   moveSnake();
   checkGameOver();
   removeTail();
-  rat();
+  
   drawSnake();
   
   display_image(0, screen);

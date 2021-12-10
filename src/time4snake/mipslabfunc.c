@@ -71,7 +71,7 @@ void drawBlock(int row, int column) {
   }
 }
 
-int seed = 123456;
+int seed = 12345; //should be less than 65537 (m)
 int rand(){
   seed++;
   int m = 2<<15 + 1;
