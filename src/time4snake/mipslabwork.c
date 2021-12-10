@@ -160,7 +160,7 @@ void moveSnake(void) {
 void labwork( void ) {
   delay(1000);
   clearScreen();
-  drawSnake();
   moveSnake();
+  drawSnake();
   display_image(0, screen);
 }
