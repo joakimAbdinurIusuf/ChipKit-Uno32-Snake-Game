@@ -130,40 +130,44 @@ void moveSnake(void) {
   int BTN3 = (getbtns() >> 1) & 0x1;
 
   if (direction == 0) { // left
-    moveLeft();
     if (BTN4) {
       moveDown();
       direction = 3;
     } else if (BTN3) {
       moveUp();
       direction = 1;
+    } else {
+      moveLeft();
     }
   } else if (direction == 1) { // up
-    moveUp();
     if (BTN4) {
       moveLeft();
       direction = 0;
     } else if (BTN3) {
       moveRight();
       direction = 2;
+    } else {
+      moveUp();
     }
   } else if (direction == 2) { // right
-    moveRight();
     if (BTN4) {
       moveUp();
       direction = 1;
     } else if (BTN3) {
       moveDown();
       direction = 3;
+    } else {
+      moveRight();
     }
   } else if (direction == 3) { // down
-    moveDown();
     if (BTN4) {
       moveLeft();
       direction = 0;
     } else if (BTN3) {
       moveRight();
       direction = 2;
+    } else {
+      moveDown();
     }
   }
 }
