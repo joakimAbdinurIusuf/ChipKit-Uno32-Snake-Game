@@ -89,6 +89,18 @@ void drawSnake(void) {
   }
 }
 
+void removeTail(void) {
+  int i, j;
+  for (i = 0; i < height; i++) {
+    for (j = 0; j < width; j++) {
+      if (snakeArray[i][j] == tail) { 
+        snakeArray[i][j] = 0;
+      }
+    }
+  }
+  tail++;
+}
+
 void moveLeft(void) {
   xPos--;
   head++;
@@ -158,9 +170,10 @@ void moveSnake(void) {
 
 /* This function is called repetitively from the main program */
 void labwork( void ) {
-  delay(1000);
+  delay(300);
   clearScreen();
   moveSnake();
+  removeTail();
   drawSnake();
   display_image(0, screen);
 }
