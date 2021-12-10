@@ -16,6 +16,7 @@ uint8_t spi_send_recv(uint8_t data);
 
 /* Declare lab-related functions from mipslabfunc.c */
 char * itoaconv( int num );
+void labinit(void);
 void labwork(void);
 int nextprime( int inval );
 void quicksleep(int cyc);
@@ -23,6 +24,9 @@ void tick( unsigned int * timep );
 void clearScreen(void);
 void drawBlock(int fieldX, int fieldY);
 void changePixel(int x, int y, int value);
+void initializeSnake(void);
+void drawSnake(void);
+void moveSnake(void);
 
 /* Declare display_debug - a function to help debugging.
 
