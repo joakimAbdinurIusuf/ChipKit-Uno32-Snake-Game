@@ -23,7 +23,6 @@ int mytime = 0x5957;
 
 char textstring[] = "text, more text, and even more text!";
 
-
 int snakeArray[height][width], xPos, yPos, temp, head, tail, direction, ratExists;
 
 // 1d) porte is used in more than one function.
@@ -102,39 +101,31 @@ void moveLeft(void) {
   xPos--;
   head++;
   snakeArray[yPos][xPos] = head;
-
-  if (xPos < 0 || xPos > 31) {
-    delay(1000);
-    initializeSnake();
-  }
 }
 
 void moveRight(void) {
   xPos++;
   head++;
   snakeArray[yPos][xPos] = head;
-
-  if (xPos < 0 || xPos > 31) {
-    delay(1000);
-    initializeSnake();
-  }
 }
 
 void moveUp(void) {
   yPos--;
   head++;
   snakeArray[yPos][xPos] = head;
-
-  if (yPos < 0 || yPos > 7) {
-    delay(1000);
-    initializeSnake();
-  }
 }
 
 void moveDown(void) {
   yPos++;
   head++;
   snakeArray[yPos][xPos] = head;
+}
+
+void checkGameOver(void) {
+  if (xPos < 0 || xPos > 31) {
+    delay(1000);
+    initializeSnake();
+  }
 
   if (yPos < 0 || yPos > 7) {
     delay(1000);
@@ -206,6 +197,7 @@ void labwork( void ) {
   delay(300);
   clearScreen();
   moveSnake();
+  checkGameOver();
   rat();
   removeTail();
   drawSnake();
