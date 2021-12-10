@@ -25,10 +25,6 @@ char textstring[] = "text, more text, and even more text!";
 
 int snakeArray[height][width], xPos, yPos, temp, head, tail, direction; 
 
-/*
-Direction 
-*/
-
 // 1d) porte is used in more than one function.
 // volatile int = (volatile int*) 0xbf886110; // 0xbf886110
 
