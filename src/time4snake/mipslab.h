@@ -27,6 +27,8 @@ void changePixel(int x, int y, int value);
 void initializeSnake(void);
 void drawSnake(void);
 void moveSnake(void);
+void rat(void);
+int rand();
 
 /* Declare display_debug - a function to help debugging.
 

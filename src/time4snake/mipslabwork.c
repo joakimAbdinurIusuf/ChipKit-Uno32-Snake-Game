@@ -23,11 +23,8 @@ int mytime = 0x5957;
 
 char textstring[] = "text, more text, and even more text!";
 
-int snakeArray[height][width], xPos, yPos, temp, head, tail, direction; 
 
-/*
-Direction 
-*/
+int snakeArray[height][width], xPos, yPos, temp, head, tail, direction, ratExists;
 
 // 1d) porte is used in more than one function.
 // volatile int = (volatile int*) 0xbf886110; // 0xbf886110
@@ -82,7 +79,7 @@ void drawSnake(void) {
   int i, j;
   for (i = 0; i < height; i++) {
     for (j = 0; j < width; j++) {
-      if (snakeArray[i][j] > 0) { 
+      if (snakeArray[i][j] != 0) { 
         drawBlock(i*4, j*4);
       }
     }
@@ -192,12 +189,26 @@ void moveSnake(void) {
   }
 }
 
+void rat(){
+  while(!ratExists){
+    int xRat = rand() % 128; // add time function later?
+    int yRat = rand() % 32;
+    if(snakeArray[xRat][yRat]==0){
+      snakeArray[xRat][yRat]=-1;
+      ratExists=1;
+    }
+  }
+}
+
+
 /* This function is called repetitively from the main program */
 void labwork( void ) {
   delay(300);
   clearScreen();
   moveSnake();
+  rat();
   removeTail();
   drawSnake();
+  
   display_image(0, screen);
 }
