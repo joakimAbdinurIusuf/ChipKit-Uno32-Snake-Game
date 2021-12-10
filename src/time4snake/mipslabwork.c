@@ -102,8 +102,8 @@ void moveSnake(void) {
 
 void rat(){
   while(!ratExists){
-    int xRat = rand(time(0)) % 128;
-    int yRat = rand(time(0)) % 32;
+    int xRat = rand() % 128; // add time function later?
+    int yRat = rand() % 32;
     if(snakeArray[xRat][yRat]==0){
       snakeArray[xRat][yRat]=-1;
       ratExists=1;
