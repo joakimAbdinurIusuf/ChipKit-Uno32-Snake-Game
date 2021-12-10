@@ -23,7 +23,11 @@ int mytime = 0x5957;
 
 char textstring[] = "text, more text, and even more text!";
 
-int snakeArray[height][width], xPos, yPos, temp, head, tail; 
+int snakeArray[height][width], xPos, yPos, temp, head, tail, direction; 
+
+/*
+Direction 
+*/
 
 // 1d) porte is used in more than one function.
 // volatile int = (volatile int*) 0xbf886110; // 0xbf886110
@@ -82,6 +86,30 @@ void drawSnake(void) {
       }
     }
   }
+}
+
+void moveLeft(void) {
+  xPos--;
+  head++;
+  snakeArray[yPos][xPos] = head;
+}
+
+void moveRight(void) {
+  xPos++;
+  head++;
+  snakeArray[yPos][xPos] = head;
+}
+
+void moveUp(void) {
+  yPos--;
+  head++;
+  snakeArray[yPos][xPos] = head;
+}
+
+void moveDown(void) {
+  yPos++;
+  head++;
+  snakeArray[yPos][xPos] = head;
 }
 
 void moveSnake(void) {
