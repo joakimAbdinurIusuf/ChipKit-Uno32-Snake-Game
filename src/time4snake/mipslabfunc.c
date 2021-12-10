@@ -71,7 +71,14 @@ void drawBlock(int row, int column) {
   }
 }
 
-
+int seed = 123456;
+int rand(){
+  seed++;
+  int m = 2<<15 + 1;
+  int a = 75;
+  int c = 74;
+  return (a*seed+c) % m;
+}
 
 
 
