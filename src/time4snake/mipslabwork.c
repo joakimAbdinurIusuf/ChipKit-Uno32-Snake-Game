@@ -169,10 +169,10 @@ void moveSnake(void) {
     }
   } else if (direction == 3) { // down
     if (BTN4) {
-      moveLeft();
+      moveRight();
       direction = 0;
     } else if (BTN3) {
-      moveRight();
+      moveLeft();
       direction = 2;
     } else {
       moveDown();
