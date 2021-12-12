@@ -25,12 +25,23 @@ void clearScreen(void);
 void drawBlock(int fieldX, int fieldY);
 void changePixel(int x, int y, int value);
 void initializeSnake(void);
-void drawSnake(void);
+void drawSnakeAndRat(void);
 void moveSnake(void);
 void rat(void);
 int rand();
 void checkRat();
-void checkGameOver();
+void setAllElementsOfSnakeArrayToZero(void);
+void initializeSnake(void);
+void removeTail(void);
+void moveLeft(void);
+void moveRight(void);
+void moveUp(void);
+void moveDown(void);
+void checkInvalidXPosition(void);
+void checkInvalidYPosition(void);
+void checkCollisionWithItself(void);
+void checkGameOver(void);
+void moveSnake(void);
 
 /* Declare display_debug - a function to help debugging.
 
