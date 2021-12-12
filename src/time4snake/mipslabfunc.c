@@ -23,9 +23,10 @@ static void num32asc( char * s, int );
 #define DISPLAY_TURN_OFF_VDD (PORTFSET = 0x40)
 #define DISPLAY_TURN_OFF_VBAT (PORTFSET = 0x20)
 
-/* Egna functioner  */
+/* Our functions  */
 
 /*
+Jocke.
 Clear the screen by setting each pixel of the display to 1.
 */
 void clearScreen(void) {
@@ -91,18 +92,7 @@ int rand(){
   return (a*seed+c) % m;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
+/* End of our functions  */
 
 /* quicksleep:
    A simple function to create a small delay.
