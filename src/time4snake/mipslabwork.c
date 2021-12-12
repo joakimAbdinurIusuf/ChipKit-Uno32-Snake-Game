@@ -235,6 +235,10 @@ void checkGameOver(void) {
   }
 }
 
+/*
+Jocke.
+Start a new game by initializing the snake and setting rat exists to 0.
+*/
 void startNewGame(void) {
   initializeSnake(); 
   ratExists = 0;
