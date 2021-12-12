@@ -8,13 +8,13 @@ The objective of this project is to develop the game Snake. The snake eats squar
 - Display game on built-in OLED graphical display.
 - Snake moves across the screen in X and Y directions.
 - The direction of the snake is changed when the buttons are pressed.
-- Snake chases square rats, which, when eaten, increases the length ofthe snake and awards points to the player.
+- Snake chases square rats, which, when eaten, increases the length of the snake and awards points to the player.
 - Snake can collide with itself and walls, in which case the player loses.
 - Display number of square rats eaten (score) when the game is over.
 
 ## Solution
 
-We will develop our project on the ChipKIT Uno32 board together with the Basic I/O shield. The game will be shown on the small display of the BasicI/O shield, and the push buttons will be used to move the snake in vertical and horizontal directions. The interrupts triggered by the built in timer will be used to update the screen. We will develop the game using MCB32tools and C.
+We will develop our project on the ChipKIT Uno32 board together with the Basic I/O shield. The game will be shown on the small display of the Basic I/O shield, and the push buttons will be used to move the snake in vertical and horizontal directions. The interrupts triggered by the built in timer will be used to update the screen. We will develop the game using MCB32tools and C.
 
 ## Verification
 
