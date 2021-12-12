@@ -220,7 +220,7 @@ If the position of the head is greater than 0, it has collided with itself
 because the value of the rat is -1 and the rest of the screen is set to 0.
 */
 void checkCollisionWithItself(void) {
-  if (snakeArray[yPos][xPos] > 0 && snakeArray[yPos][xPos] != tail) { 
+  if (snakeArray[yPos][xPos] > 0) { 
     delay(1000);
     initializeSnake(); // change to e.g. game over later instead of simply starting over
     ratExists=0;
