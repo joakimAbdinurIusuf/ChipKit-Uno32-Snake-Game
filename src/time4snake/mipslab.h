@@ -37,11 +37,14 @@ void moveLeft(void);
 void moveRight(void);
 void moveUp(void);
 void moveDown(void);
-void checkInvalidXPosition(void);
-void checkInvalidYPosition(void);
-void checkCollisionWithItself(void);
+int hitSideWall();
+int hitUpperOrLowerWall();
+int snakeCollidedWithItself();
 void checkGameOver(void);
+void startNewGame(void);
 void moveSnake(void);
+void displayGameOverScreen(void);
+void startNewGame();
 
 /* Declare display_debug - a function to help debugging.
 

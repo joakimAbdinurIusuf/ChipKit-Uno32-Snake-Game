@@ -187,58 +187,65 @@ void moveDown(void) {
 }
 
 /*
-Jocke and Edvin. 
+Jocke.
 Valid x-positions range from 0 to 31 (inclusive). So if xPos
 is less than 0 or greater than 31 the snake is outside of the screen.
 This means it has hit a wall and should die.
 */
-void checkInvalidXPosition(void) {
+int hitSideWall() {
   if (xPos < 0 || xPos > 31) {
-    delay(1000);
-    initializeSnake(); // change to e.g. game over later instead of simply starting over
-    ratExists=0;
-    rat();
-  }
-}
-
-/*
-Jocke and Edvin.
-Valid y-positions range from 0 to 7 (inclusive). So if yPos
-is less than 0 or greater than 7 the snake is outside of the screen.
-This means it has hit a wall and should die.
-*/
-void checkInvalidYPosition(void) {
-  if (yPos < 0 || yPos > 7) {
-    delay(1000);
-    initializeSnake(); // change to e.g. game over later instead of simply starting over
-    ratExists=0;
-    rat();
-  }
-}
-
-/*
-Jocke and Edvin.
-Called in moveLeft, moveRight, moveUp and moveDown. 
-If the position of the head is greater than 0, it has collided with itself
-because the value of the rat is -1 and the rest of the screen is set to 0.
-*/
-void checkCollisionWithItself(void) {
-  if (snakeArray[yPos][xPos] > 0) { 
-    delay(1000);
-    initializeSnake(); // change to e.g. game over later instead of simply starting over
-    ratExists=0;
-    rat();
+    return 1;
+  } else {
+    return 0;
   }
 }
 
 /*
 Jocke.
-Check the cases where the snake dies, i.e. when it hits a wall or itself.
+Valid y-positions range from 0 to 7 (inclusive). So if yPos
+is less than 0 or greater than 7 the snake is outside of the screen.
+This means it has hit a wall and should die.
+*/
+int hitUpperOrLowerWall() {
+  if (yPos < 0 || yPos > 7) {
+    return 1;
+  } else {
+    return 0;
+  }
+}
+
+/*
+Jocke.
+If the position of the head is greater than 0, it has collided with itself.
+*/
+int snakeCollidedWithItself() {
+  if (snakeArray[yPos][xPos] > 0) { 
+    return 1;
+  } else {
+    return 0;
+  }
+}
+
+/*
+Jocke and Edvin.
+Called in moveLeft, moveRight, moveUp and moveDown. Check the cases where the 
+snake dies, i.e. when it hits a wall or itself.
 */
 void checkGameOver(void) {
-  checkInvalidXPosition();
-  checkInvalidYPosition();
-  checkCollisionWithItself();
+  if (hitSideWall() || hitUpperOrLowerWall() || snakeCollidedWithItself())  {
+    delay(1000);
+    startNewGame();
+  }
+}
+
+/*
+Jocke.
+Start a new game by initializing the snake and setting rat exists to 0.
+*/
+void startNewGame(void) {
+  initializeSnake(); 
+  ratExists = 0;
+  rat();
 }
 
 /*
@@ -262,10 +269,15 @@ in the other directions). If BTN4 is pressed, we call moveUp() and change the di
 it will simply keep moving to the right. 
 */
 void moveSnake(void) {
+  int left = 0;
+  int up = 1;
+  int right = 2;
+  int down = 3;
+
   int BTN4 = (getbtns() >> 2) & 0x1;
   int BTN3 = (getbtns() >> 1) & 0x1;
 
-  if (direction == 0) { // left
+  if (direction == left) { 
     if (BTN4) {
       moveDown();
       direction = 3;
@@ -275,7 +287,7 @@ void moveSnake(void) {
     } else {
       moveLeft();
     }
-  } else if (direction == 1) { // up
+  } else if (direction == up) { 
     if (BTN4) {
       moveLeft();
       direction = 0;
@@ -285,7 +297,7 @@ void moveSnake(void) {
     } else {
       moveUp();
     }
-  } else if (direction == 2) { // right
+  } else if (direction == right) { 
     if (BTN4) {
       moveUp();
       direction = 1;
@@ -295,7 +307,7 @@ void moveSnake(void) {
     } else {
       moveRight();
     }
-  } else if (direction == 3) { // down
+  } else if (direction == down) {
     if (BTN4) {
       moveRight();
       direction = 2;
