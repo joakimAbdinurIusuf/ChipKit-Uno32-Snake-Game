@@ -129,20 +129,58 @@ void moveDown(void) {
   snakeArray[yPos][xPos] = head;
 }
 
-void checkGameOver(void) {
+/*
+Jocke and Edvin. 
+Valid x-positions range from 0 to 31 (inclusive). So if xPos
+is less than 0 or greater than 31 the snake is outside of the screen.
+This means it has hit a wall and should die.
+*/
+void checkInvalidXPosition(void) {
   if (xPos < 0 || xPos > 31) {
     delay(1000);
-    initializeSnake();
+    initializeSnake(); // change to e.g. game over later instead of simply starting over
     ratExists=0;
     rat();
   }
+}
 
+/*
+Jocke and Edvin.
+Valid y-positions range from 0 to 7 (inclusive). So if yPos
+is less than 0 or greater than 7 the snake is outside of the screen.
+This means it has hit a wall and should die.
+*/
+void checkInvalidYPosition(void) {
   if (yPos < 0 || yPos > 7) {
     delay(1000);
-    initializeSnake();
+    initializeSnake(); // change to e.g. game over later instead of simply starting over
     ratExists=0;
     rat();
   }
+}
+
+/*
+Jocke and Edvin.
+Called in moveLeft, moveRight, moveUp and moveDown. 
+If the position of the head is greater than 0, it has collided with itself
+because the value of the rat is -1 and the rest of the screen is set to 0.
+*/
+void checkCollisionWithItself(void) {
+  if (snakeArray[yPos][xPos] > 0) { 
+    delay(1000);
+    initializeSnake(); // change to e.g. game over later instead of simply starting over
+    ratExists=0;
+    rat();
+  }
+}
+
+/*
+Jocke.
+*/
+void checkGameOver(void) {
+  checkInvalidXPosition();
+  checkInvalidYPosition();
+  checkCollisionWithItself();
 }
 
 void moveSnake(void) {
@@ -218,10 +256,7 @@ void labwork( void ) {
   delay(300);
   clearScreen();
   moveSnake();
-  // checkGameOver();
-  
-  
+  removeTail();
   drawSnake();
-  
   display_image(0, screen);
 }
