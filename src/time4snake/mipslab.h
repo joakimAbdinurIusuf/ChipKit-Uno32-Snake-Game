@@ -29,6 +29,7 @@ void drawSnake(void);
 void moveSnake(void);
 void rat(void);
 int rand();
+void checkRat();
 
 /* Declare display_debug - a function to help debugging.
 

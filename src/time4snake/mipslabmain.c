@@ -58,6 +58,7 @@ int main(void) {
 	display_image(0, screen);
 
 	initializeSnake();
+	rat();
 	
 	labinit(); // Do any game-specific initialization 
 
