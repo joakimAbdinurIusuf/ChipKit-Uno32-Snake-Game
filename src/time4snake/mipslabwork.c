@@ -320,6 +320,8 @@ void checkRat(){
   if(snakeArray[yPos][xPos]==-1){
     ratExists=0;
     rat();
+  } else {
+    removeTail();
   }
 }
 
