@@ -231,6 +231,26 @@ void checkGameOver(void) {
   checkCollisionWithItself();
 }
 
+/*
+Jocke.
+Continuously move the snake in a certain direction, or move it in a new
+direction when BTN4 and BTN3 is pressed.
+
+The principle is this: We have a global variable called direction which is initialized to
+2 in initializeSnake. The value 0 means left, 1 means up, 2 means right and 3 means down.
+In moveSnake() we have four overarching if and else if conditions that check the value of 
+direction. 
+
+We want BTN4 to move the snake to its' left, and BTN3 to move the snake to its'
+right, whatever direction it has. So, for instance, if it is moving to the right, pressing
+BTN4 should move the snake upwards (its' left) and pressing BTN3 should move it downwards
+(its' right).
+
+If the direction is equal to 2, it will check three conditions (the same thing applies
+in the other directions). If BTN4 is pressed, we call moveUp() and change the direction to
+1 (up). If BTN3 is pressed, we call moveDown() and change the direction to 3. Otherwise
+it will simply keep moving to the right. 
+*/
 void moveSnake(void) {
   int BTN4 = (getbtns() >> 2) & 0x1;
   int BTN3 = (getbtns() >> 1) & 0x1;
