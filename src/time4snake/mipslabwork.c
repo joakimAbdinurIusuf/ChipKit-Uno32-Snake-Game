@@ -56,7 +56,12 @@ void setAllElementsOfSnakeArrayToZero(void) {
   }
 }
 
-// Divide the 2D snake array into 32x8 blocks, each being 4x4 pixels?
+/*
+Jocke.
+Start by setting all the elements in the snake array to zero.
+In drawSnakeAndRat, values that are not zero will be drawn.
+So set xPos to width/2 and yPos to height/2 to draw the snake in the 
+*/
 void initializeSnake(void) {
   setAllElementsOfSnakeArrayToZero();
 
@@ -74,7 +79,14 @@ void initializeSnake(void) {
   }
 }
 
-void drawSnake(void) {
+/*
+Jocke.
+Draw the snake. Loop through the entire snake array. If it isn't 0,
+the block at snakeArray[i][j] is either the snake (values greater than zero),
+or a rat (value of -1). We then draw a white block in this positions. 
+The rest of the blocks remain black.
+*/
+void drawSnakeAndRat(void) {
   int i, j;
   for (i = 0; i < height; i++) {
     for (j = 0; j < width; j++) {
@@ -85,6 +97,13 @@ void drawSnake(void) {
   }
 }
 
+/*
+Jocke.
+Tail is initially set to 1. In labwork, we call this function repeatedly.
+We loop thorugh the entire 2D snakeArray. When we find a block that is equal to
+the value of tail, we set the value at that block to 0. This means that when we draw the snake, 
+this block will be black the next it is drawn. 
+*/
 void removeTail(void) {
   int i, j;
   for (i = 0; i < height; i++) {
@@ -97,6 +116,13 @@ void removeTail(void) {
   tail++;
 }
 
+/*
+Jocke and Edvin.
+Moves snake to the left by decrementing the xPosition by 1.
+We also check collision with the rat, itself and the walls.
+The value of head is incremented and the value of snakeArray[yPos][xPos] is set
+to head.
+*/
 void moveLeft(void) {
   xPos--;
   head++;
@@ -105,6 +131,13 @@ void moveLeft(void) {
   snakeArray[yPos][xPos] = head;
 }
 
+/*
+Jocke and Edvin.
+Moves snake to the right by incrementing the xPosition by 1.
+We also check collision with the rat, itself and the walls.
+The value of head is incremented and the value of snakeArray[yPos][xPos] is set
+to head.
+*/
 void moveRight(void) {
   xPos++;
   head++;
@@ -113,6 +146,13 @@ void moveRight(void) {
   snakeArray[yPos][xPos] = head;
 }
 
+/*
+Jocke and Edvin.
+Moves the snake upwards by decrementing the yPosition by 1.
+We also check collision with the rat, itself and the walls.
+The value of head is incremented and the value of snakeArray[yPos][xPos] is set
+to head.
+*/
 void moveUp(void) {
   yPos--;
   head++;
@@ -121,6 +161,13 @@ void moveUp(void) {
   snakeArray[yPos][xPos] = head;
 }
 
+/*
+Jocke and Edvin.
+Moves the snake downwards by incrementing the yPosition by 1.
+We also check collision with the rat, itself and the walls.
+The value of head is incremented and the value of snakeArray[yPos][xPos] is set
+to head.
+*/
 void moveDown(void) {
   yPos++;
   head++;
@@ -166,7 +213,7 @@ If the position of the head is greater than 0, it has collided with itself
 because the value of the rat is -1 and the rest of the screen is set to 0.
 */
 void checkCollisionWithItself(void) {
-  if (snakeArray[yPos][xPos] > 0) { 
+  if (snakeArray[yPos][xPos] > 0 && snakeArray[yPos][xPos] != tail) { 
     delay(1000);
     initializeSnake(); // change to e.g. game over later instead of simply starting over
     ratExists=0;
@@ -176,6 +223,7 @@ void checkCollisionWithItself(void) {
 
 /*
 Jocke.
+Check the cases where the snake dies, i.e. when it hits a wall or itself.
 */
 void checkGameOver(void) {
   checkInvalidXPosition();
@@ -255,8 +303,6 @@ void labwork( void ) {
   clearScreen();
   moveSnake();
   removeTail();
-  
-  drawSnake();
-  
+  drawSnakeAndRat();
   display_image(0, screen);
 }
