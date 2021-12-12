@@ -183,10 +183,6 @@ void moveDown(void) {
   snakeArray[yPos][xPos] = head;
 }
 
-void startNewGame() {
-  
-}
-
 /*
 Jocke.
 Valid x-positions range from 0 to 31 (inclusive). So if xPos
@@ -235,10 +231,14 @@ snake dies, i.e. when it hits a wall or itself.
 void checkGameOver(void) {
   if (hitSideWall() || hitUpperOrLowerWall() || snakeCollidedWithItself())  {
     delay(1000);
-    initializeSnake(); 
-    ratExists = 0;
-    rat();
+    startNewGame();
   }
+}
+
+void startNewGame(void) {
+  initializeSnake(); 
+  ratExists = 0;
+  rat();
 }
 
 /*
