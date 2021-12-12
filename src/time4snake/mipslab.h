@@ -46,6 +46,8 @@ void moveSnake(void);
 void displayGameOverScreen(void);
 void startNewGame();
 
+// comment
+
 /* Declare display_debug - a function to help debugging.
 
    After calling display_debug,
