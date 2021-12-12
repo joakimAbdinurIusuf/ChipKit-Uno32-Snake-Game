@@ -23,17 +23,20 @@ int mytime = 0x5957;
 
 char textstring[] = "text, more text, and even more text!";
 
-int snakeArray[height][width], xPos, yPos, temp, head, tail, direction, ratExists;
+int snakeArray[height][width], xPos, yPos, temp, head, tail, direction, ratExists; // Jocke and Edvin
 
-// 1d) porte is used in more than one function.
-// volatile int = (volatile int*) 0xbf886110; // 0xbf886110
-
-/* Interrupt Service Routine */
+/* 
+Jocke and Edvin.
+Interrupt Service Routine 
+*/
 void user_isr( void ) {
     return;
 }
 
-/* Lab-specific initialization goes here */
+/* 
+Jocke and Edvin.
+Lab-specific initialization goes here.
+*/
 void labinit( void )
 {
   // 1c) 
@@ -47,6 +50,10 @@ void labinit( void )
   return;
 }
 
+/*
+Jocke.
+Called in initializeSnake. Set all elements in the 2D snake array to 0.
+*/
 void setAllElementsOfSnakeArrayToZero(void) {
   int i, j;
   for (i = 0; i < height; i++) {
