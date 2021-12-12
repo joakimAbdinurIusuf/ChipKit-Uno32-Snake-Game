@@ -23,9 +23,10 @@ static void num32asc( char * s, int );
 #define DISPLAY_TURN_OFF_VDD (PORTFSET = 0x40)
 #define DISPLAY_TURN_OFF_VBAT (PORTFSET = 0x20)
 
-/* Egna functioner  */
+/* Our functions  */
 
 /*
+Jocke.
 Clear the screen by setting each pixel of the display to 1.
 */
 void clearScreen(void) {
@@ -58,9 +59,20 @@ void changePixel(int x, int y, int value){
   }
 }
 
+/*
+Jocke.
+The snake array is 8x32 block, but the OLED display is 32x128 pixels.
+As changePixels only changes one pixel and we want drawBlock to draw
+a block that is 4x4 pixels, the conditions in the for-loops are set to
+yRow < row + 4 and xColumn < column + 4. So if we call drawBlock(0,0), we
+want the first 4x4 pixels in the upper left corner to be drawn. yRow would
+loop from 0 to 3, and xColumn would also loops from 0 to 3. This way all
+ 16 pixels are set to white in the nested for-loop.
+*/
 void drawBlock(int row, int column) {
-  // make sure block is within the OLED display 
-  if (row >= 0 && row < 29 && column >= 0 && column < 125) { 
+  int validYPosition = row >= 0 && row < 29;
+  int validXPosition = column >= 0 && column < 125;
+  if (validYPosition && validXPosition) { // make sure block is within the OLED display 
     int yRow;
     int xColumn;
     for (yRow = row; yRow < row + 4; yRow++) {
@@ -80,18 +92,7 @@ int rand(){
   return (a*seed+c) % m;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
+/* End of our functions  */
 
 /* quicksleep:
    A simple function to create a small delay.

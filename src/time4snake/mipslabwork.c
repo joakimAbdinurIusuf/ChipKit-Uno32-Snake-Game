@@ -23,17 +23,20 @@ int mytime = 0x5957;
 
 char textstring[] = "text, more text, and even more text!";
 
-int snakeArray[height][width], xPos, yPos, temp, head, tail, direction, ratExists;
+int snakeArray[height][width], xPos, yPos, temp, head, tail, direction, ratExists; // Jocke and Edvin
 
-// 1d) porte is used in more than one function.
-// volatile int = (volatile int*) 0xbf886110; // 0xbf886110
-
-/* Interrupt Service Routine */
+/* 
+Jocke and Edvin.
+Interrupt Service Routine 
+*/
 void user_isr( void ) {
     return;
 }
 
-/* Lab-specific initialization goes here */
+/* 
+Jocke and Edvin.
+Lab-specific initialization goes here.
+*/
 void labinit( void )
 {
   // 1c) 
@@ -47,6 +50,10 @@ void labinit( void )
   return;
 }
 
+/*
+Jocke.
+Called in initializeSnake. Set all elements in the 2D snake array to 0.
+*/
 void setAllElementsOfSnakeArrayToZero(void) {
   int i, j;
   for (i = 0; i < height; i++) {
@@ -56,7 +63,12 @@ void setAllElementsOfSnakeArrayToZero(void) {
   }
 }
 
-// Divide the 2D snake array into 32x8 blocks, each being 4x4 pixels?
+/*
+Jocke.
+Start by setting all the elements in the snake array to zero.
+In drawSnakeAndRat, values that are not zero will be drawn.
+So set xPos to width/2 and yPos to height/2 to draw the snake in the 
+*/
 void initializeSnake(void) {
   setAllElementsOfSnakeArrayToZero();
 
@@ -74,7 +86,14 @@ void initializeSnake(void) {
   }
 }
 
-void drawSnake(void) {
+/*
+Jocke.
+Draw the snake. Loop through the entire snake array. If it isn't 0,
+the block at snakeArray[i][j] is either the snake (values greater than zero),
+or a rat (value of -1). We then draw a white block in this positions. 
+The rest of the blocks remain black.
+*/
+void drawSnakeAndRat(void) {
   int i, j;
   for (i = 0; i < height; i++) {
     for (j = 0; j < width; j++) {
@@ -85,6 +104,13 @@ void drawSnake(void) {
   }
 }
 
+/*
+Jocke.
+Tail is initially set to 1. In labwork, we call this function repeatedly.
+We loop thorugh the entire 2D snakeArray. When we find a block that is equal to
+the value of tail, we set the value at that block to 0. This means that when we draw the snake, 
+this block will be black the next it is drawn. 
+*/
 void removeTail(void) {
   int i, j;
   for (i = 0; i < height; i++) {
@@ -97,6 +123,13 @@ void removeTail(void) {
   tail++;
 }
 
+/*
+Jocke and Edvin.
+Moves snake to the left by decrementing the xPosition by 1.
+We also check collision with the rat, itself and the walls.
+The value of head is incremented and the value of snakeArray[yPos][xPos] is set
+to head.
+*/
 void moveLeft(void) {
   xPos--;
   head++;
@@ -105,6 +138,13 @@ void moveLeft(void) {
   snakeArray[yPos][xPos] = head;
 }
 
+/*
+Jocke and Edvin.
+Moves snake to the right by incrementing the xPosition by 1.
+We also check collision with the rat, itself and the walls.
+The value of head is incremented and the value of snakeArray[yPos][xPos] is set
+to head.
+*/
 void moveRight(void) {
   xPos++;
   head++;
@@ -113,6 +153,13 @@ void moveRight(void) {
   snakeArray[yPos][xPos] = head;
 }
 
+/*
+Jocke and Edvin.
+Moves the snake upwards by decrementing the yPosition by 1.
+We also check collision with the rat, itself and the walls.
+The value of head is incremented and the value of snakeArray[yPos][xPos] is set
+to head.
+*/
 void moveUp(void) {
   yPos--;
   head++;
@@ -121,6 +168,13 @@ void moveUp(void) {
   snakeArray[yPos][xPos] = head;
 }
 
+/*
+Jocke and Edvin.
+Moves the snake downwards by incrementing the yPosition by 1.
+We also check collision with the rat, itself and the walls.
+The value of head is incremented and the value of snakeArray[yPos][xPos] is set
+to head.
+*/
 void moveDown(void) {
   yPos++;
   head++;
@@ -176,6 +230,7 @@ void checkCollisionWithItself(void) {
 
 /*
 Jocke.
+Check the cases where the snake dies, i.e. when it hits a wall or itself.
 */
 void checkGameOver(void) {
   checkInvalidXPosition();
@@ -183,6 +238,26 @@ void checkGameOver(void) {
   checkCollisionWithItself();
 }
 
+/*
+Jocke.
+Continuously move the snake in a certain direction, or move it in a new
+direction when BTN4 and BTN3 is pressed.
+
+The principle is this: We have a global variable called direction which is initialized to
+2 in initializeSnake. The value 0 means left, 1 means up, 2 means right and 3 means down.
+In moveSnake() we have four overarching if and else if conditions that check the value of 
+direction. 
+
+We want BTN4 to move the snake to its' left, and BTN3 to move the snake to its'
+right, whatever direction it has. So, for instance, if it is moving to the right, pressing
+BTN4 should move the snake upwards (its' left) and pressing BTN3 should move it downwards
+(its' right).
+
+If the direction is equal to 2, it will check three conditions (the same thing applies
+in the other directions). If BTN4 is pressed, we call moveUp() and change the direction to
+1 (up). If BTN3 is pressed, we call moveDown() and change the direction to 3. Otherwise
+it will simply keep moving to the right. 
+*/
 void moveSnake(void) {
   int BTN4 = (getbtns() >> 2) & 0x1;
   int BTN3 = (getbtns() >> 1) & 0x1;
@@ -257,6 +332,6 @@ void labwork( void ) {
   clearScreen();
   moveSnake();
   removeTail();
-  drawSnake();
+  drawSnakeAndRat();
   display_image(0, screen);
 }
