@@ -46,6 +46,9 @@ void labinit(void)
   // 1e)
   // 0000 1111 1110 0000 -> 0x0fe0
   TRISD = TRISD | 0xfe0;
+
+  // 15:e biten 1000 0000 0000 0000 = 0x8000
+  CNCON = CNCON | 0x8000 // Enable CN module. See 12.3.3.1. step 3 in PIC32 reference manual (I/O Ports)
   
   return;
 }
@@ -331,7 +334,6 @@ void labwork( void ) {
   delay(300);
   clearScreen();
   moveSnake();
-  removeTail();
   drawSnakeAndRat();
   display_image(0, screen);
 }
