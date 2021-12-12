@@ -262,10 +262,15 @@ in the other directions). If BTN4 is pressed, we call moveUp() and change the di
 it will simply keep moving to the right. 
 */
 void moveSnake(void) {
+  int left = 0;
+  int up = 1;
+  int right = 2;
+  int down = 3;
+
   int BTN4 = (getbtns() >> 2) & 0x1;
   int BTN3 = (getbtns() >> 1) & 0x1;
 
-  if (direction == 0) { // left
+  if (direction == left) { 
     if (BTN4) {
       moveDown();
       direction = 3;
@@ -275,7 +280,7 @@ void moveSnake(void) {
     } else {
       moveLeft();
     }
-  } else if (direction == 1) { // up
+  } else if (direction == up) { 
     if (BTN4) {
       moveLeft();
       direction = 0;
@@ -285,7 +290,7 @@ void moveSnake(void) {
     } else {
       moveUp();
     }
-  } else if (direction == 2) { // right
+  } else if (direction == right) { 
     if (BTN4) {
       moveUp();
       direction = 1;
@@ -295,7 +300,7 @@ void moveSnake(void) {
     } else {
       moveRight();
     }
-  } else if (direction == 3) { // down
+  } else if (direction == down) {
     if (BTN4) {
       moveRight();
       direction = 2;
