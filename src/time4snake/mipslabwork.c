@@ -29,7 +29,7 @@ int snakeArray[height][width], xPos, yPos, temp, head, tail, direction, ratExist
 Jocke and Edvin.
 Interrupt Service Routine 
 */
-void user_isr( void ) {
+void user_isr(void) {
     return;
 }
 
@@ -37,7 +37,7 @@ void user_isr( void ) {
 Jocke and Edvin.
 Lab-specific initialization goes here.
 */
-void labinit( void )
+void labinit(void)
 {
   // 1c) 
   volatile int* trise = (volatile int*) 0xbf886100; 
