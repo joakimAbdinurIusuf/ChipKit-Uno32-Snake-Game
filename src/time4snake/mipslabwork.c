@@ -19,17 +19,23 @@
 #define width 32
 
 /* Global variables */
-int mytime = 0x5957;
+int snakeArray[height][width], xPos, yPos, temp, head, tail, direction;
 
-char textstring[] = "text, more text, and even more text!";
+int ratExists; 
 
-int snakeArray[height][width], xPos, yPos, temp, head, tail, direction, ratExists; // Jocke and Edvin
+int gameOver; 
+
+int timeoutcount, gameOverCount;
+
+int score, highscore;
+
 
 int turnDirection = 1; //0 turn to the left, 1 go forward, 2 turn to the right
 int prevBTN4 = 0;
 int prevBTN3 = 0;
 
 int timeoutcount;
+
 /* 
 Jocke and Edvin.
 Interrupt Service Routine 
@@ -63,6 +69,10 @@ void labinit(void)
   
   TMR2 = 0; // Reset timer
   T2CONSET = 0x8000; // Start the timer
+
+  gameOver = 0;
+  score = 0;
+  highscore = 0;
 
   return;
 }
@@ -150,9 +160,7 @@ to head.
 void moveLeft(void) {
   xPos--;
   head++;
-  checkRat();
-  checkGameOver();
-  snakeArray[yPos][xPos] = head;
+  gameOverOrCheckRat();
 }
 
 /*
@@ -165,9 +173,7 @@ to head.
 void moveRight(void) {
   xPos++;
   head++;
-  checkRat();
-  checkGameOver();
-  snakeArray[yPos][xPos] = head;
+  gameOverOrCheckRat();
 }
 
 /*
@@ -180,9 +186,7 @@ to head.
 void moveUp(void) {
   yPos--;
   head++;
-  checkRat();
-  checkGameOver();
-  snakeArray[yPos][xPos] = head;
+  gameOverOrCheckRat();
 }
 
 /*
@@ -195,9 +199,21 @@ to head.
 void moveDown(void) {
   yPos++;
   head++;
-  checkRat();
-  checkGameOver();
-  snakeArray[yPos][xPos] = head;
+  gameOverOrCheckRat();
+}
+
+/*
+Jocke och Edvin.
+Fixes bug where score is increased if one crashes into the top wall.
+*/
+void gameOverOrCheckRat(void) {
+  if (checkGameOver()) {
+    delay(1000);
+    gameOver = 1;
+  } else {
+    checkRat();
+    snakeArray[yPos][xPos] = head;
+  }
 }
 
 /*
@@ -241,15 +257,91 @@ int snakeCollidedWithItself() {
 }
 
 /*
-Jocke and Edvin.
+Jocke.
 Called in moveLeft, moveRight, moveUp and moveDown. Check the cases where the 
 snake dies, i.e. when it hits a wall or itself.
 */
-void checkGameOver(void) {
-  if (hitSideWall() || hitUpperOrLowerWall() || snakeCollidedWithItself())  {
-    delay(1000);
-    startNewGame();
+int checkGameOver() {
+  if (hitSideWall() || hitUpperOrLowerWall() || snakeCollidedWithItself()) {
+    return 1;
+  } else {
+    return 0;
   }
+}
+
+/*
+Jocke.
+Convert number to its' corresponding ascii value.
+*/
+char intToAscii(int number) {
+  char num = number + 48;
+  return num;
+}
+
+/*
+Jocke.
+Get the first digit of a three digit number.
+*/
+int getFirstDigit(int number) {
+  int num = number / 100;
+  return num;
+}
+
+/*
+Jocke.
+Get the middle digit of a three digit number.
+*/
+int getMiddleDigit(int number) {
+  if (number < 100) {
+    int num = number / 10;
+    return num;
+  } else if (number >= 100 && number < 199) {
+    number = number - 100;
+    int num2 = number / 10;
+    return num2;
+  } else {
+    number = number - 200;
+    int num2 = number / 10;
+    return num2;
+  }
+}
+
+/*
+Jocke.
+Get the last digit of a three digit number.
+*/
+int getLastDigit(int number) {
+  int num = number % 10;
+  return num;
+}
+
+/*
+Jocke.
+Display game over and the score.
+*/
+void displayGameOverScreen(void) {
+  int firstDigit = getFirstDigit(score);
+  int middleDigit = getMiddleDigit(score);
+  int lastDigit = getLastDigit(score);
+  char firstDigitAsChar = intToAscii(firstDigit);
+  char middleDigitAsChar = intToAscii(middleDigit);
+  char lastDigitAsChar = intToAscii(lastDigit);
+
+  char scoreArray[] = {'S', 'c', 'o', 'r', 'e', ':', ' ', firstDigitAsChar, middleDigitAsChar, lastDigitAsChar, '\0'};
+
+  int firstDigitHS = getFirstDigit(highscore);
+  int middleDigitHS = getMiddleDigit(highscore);
+  int lastDigitHS = getLastDigit(highscore);
+  char firstDigitAsCharHS = intToAscii(firstDigitHS);
+  char middleDigitAsCharHS = intToAscii(middleDigitHS);
+  char lastDigitAsCharHS = intToAscii(lastDigitHS);
+
+  char highScoreArray[] = {'H', 'i', 'g', 'h', 's', 'c', 'o', 'r', 'e', ':', ' ', firstDigitAsCharHS, middleDigitAsCharHS, lastDigitAsCharHS, '\0'};
+
+  display_string(0, "Game over!");
+  display_string(1, scoreArray);
+  display_string(2, highScoreArray);
+  display_update();
 }
 
 /*
@@ -258,7 +350,9 @@ Start a new game by initializing the snake and setting rat exists to 0.
 */
 void startNewGame(void) {
   initializeSnake(); 
+  gameOver = 0;
   ratExists = 0;
+  score = 0;
   rat();
   turnDirection = 1; //Forward
 }
@@ -346,9 +440,13 @@ void rat(){
   }
 }
 
-void checkRat(){
-  if(snakeArray[yPos][xPos]==-1){
-    ratExists=0;
+void checkRat() {
+  if(snakeArray[yPos][xPos] == -1) {
+    score++;
+    if (highscore < score) {
+      highscore = score;
+    }
+    ratExists = 0;
     rat();
   } else {
     removeTail();
@@ -365,53 +463,80 @@ int buttonOnTurn(BTN,prevBTN){
 }
 
 
+/*
+Jocke.
+Display start screen and start the game if BTN2 is pressed.
+*/
+void displayStartScreen(void) {
+  int buttonNotPressed = 1;
+  while (buttonNotPressed) {
+    display_string(0, "Press BTN2 to");
+    display_string(1, "start playing.");
+    display_string(2, "");
+    display_update();
+    if (getbtns() & 0x1) {
+      buttonNotPressed = 0;
+    }
+  }
+  startNewGame();
+  buttonNotPressed = 1;
+}
 
-/* This function is called repetitively from the main program */
+
+/* 
+Jocke and Edvin.
+This function is called repetitively from the main program 
+*/
 void labwork( void ) {
-  
 
-
-
-  // When timer two has elapsed the 8th bit is a 1
   int timerHasElapsed = IFS(0) & 0x100; // 16 bit timers
-  if (timerHasElapsed){
-    timeoutcount++;
+
+  if (gameOver) {
+    if (timerHasElapsed) {
+      gameOverCount++;
+      IFS(0) = IFS(0) & 0xFFFFFEFF;
+      displayGameOverScreen();
+      if (gameOverCount == 30) {
+        displayStartScreen();
+        gameOverCount = 0;
+      }
+    }
+  } else {
+    if (timerHasElapsed) {
+      timeoutcount++;
     
+      
+      int BTN4 = (getbtns() >> 2) & 0x1;
+      int BTN3 = (getbtns() >> 1) & 0x1;
+      //PORTE=BTN3;
+      if(BTN4 > prevBTN4){
+        PORTE++;
+      }
+
+      if(buttonOnTurn(BTN3,prevBTN3)){
+        turnDirection = 2; //right
+        //PORTE++;
+      }
+      if(buttonOnTurn(BTN4, prevBTN4)){
+        turnDirection = 0; //left
+      }
+
+      //PORTE = turnDirection+1;
+
+      prevBTN3 = BTN3;
+      prevBTN4 = BTN4;
 
 
 
-    int BTN4 = (getbtns() >> 2) & 0x1;
-    int BTN3 = (getbtns() >> 1) & 0x1;
-    //PORTE=BTN3;
-    if(BTN4 > prevBTN4){
-      PORTE++;
-    }
-
-    if(buttonOnTurn(BTN3,prevBTN3)){
-      turnDirection = 2; //right
-      //PORTE++;
-    }
-    if(buttonOnTurn(BTN4, prevBTN4)){
-      turnDirection = 0; //left
-    }
-
-    //PORTE = turnDirection+1;
-
-    prevBTN3 = BTN3;
-    prevBTN4 = BTN4;
-    
-
-
-
-
-    IFS(0) = IFS(0) & 0xFFFFFEFF;
-    if (timeoutcount == 6){
-      clearScreen();
-      moveSnake();
-      turnDirection = 1;
-      drawSnakeAndRat();
-      display_image(0, screen);
-      timeoutcount = 0;
+      IFS(0) = IFS(0) & 0xFFFFFEFF;
+      if (timeoutcount == 6){
+        clearScreen();
+        moveSnake();
+        turnDirection = 1;
+        drawSnakeAndRat();
+        display_image(0, screen);
+        timeoutcount = 0;
+      }
     }
   }
 }

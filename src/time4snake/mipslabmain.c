@@ -56,11 +56,10 @@ int main(void) {
 	
 	display_init();
 	display_image(0, screen);
-
-	initializeSnake();
-	rat();
 	
 	labinit(); // Do any game-specific initialization 
+
+	displayStartScreen();
 
 	while( 1 )
 	{

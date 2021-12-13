@@ -40,12 +40,16 @@ void moveDown(void);
 int hitSideWall();
 int hitUpperOrLowerWall();
 int snakeCollidedWithItself();
-void checkGameOver(void);
+int checkGameOver();
 void startNewGame(void);
 void moveSnake(void);
 void displayGameOverScreen(void);
-void startNewGame();
 int buttonOnTurn(int,int);
+void startNewGame(void);
+void gameOverOrCheckRat(void);
+void displayStartScreen(void);
+void clearText(void);
+
 
 /* Declare display_debug - a function to help debugging.
 
