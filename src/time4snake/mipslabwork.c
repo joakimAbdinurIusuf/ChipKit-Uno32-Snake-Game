@@ -23,9 +23,9 @@ int mytime = 0x5957;
 
 char textstring[] = "text, more text, and even more text!";
 
-int snakeArray[height][width], xPos, yPos, temp, head, tail, direction, ratExists; // Jocke and Edvin
+int snakeArray[height][width], xPos, yPos, temp, head, tail, direction, ratExists, gameOver; // Jocke and Edvin
 
-int timeoutcount;
+int timeoutcount, gameOverCount;
 /* 
 Jocke and Edvin.
 Interrupt Service Routine 
@@ -59,6 +59,8 @@ void labinit(void)
   
   TMR2 = 0; // Reset timer
   T2CONSET = 0x8000; // Start the timer
+
+  gameOver = 0;
 
   return;
 }
@@ -242,10 +244,19 @@ Called in moveLeft, moveRight, moveUp and moveDown. Check the cases where the
 snake dies, i.e. when it hits a wall or itself.
 */
 void checkGameOver(void) {
-  if (hitSideWall() || hitUpperOrLowerWall() || snakeCollidedWithItself())  {
+  if (hitSideWall() || hitUpperOrLowerWall() || snakeCollidedWithItself()) {
     delay(1000);
-    startNewGame();
+    gameOver = 1;
   }
+}
+
+/*
+Jocke.
+...
+*/
+void displayGameOverScreen(void) {
+  display_string(0, "Game over!");
+  display_update();
 }
 
 /*
@@ -254,6 +265,7 @@ Start a new game by initializing the snake and setting rat exists to 0.
 */
 void startNewGame(void) {
   initializeSnake(); 
+  gameOver = 0;
   ratExists = 0;
   rat();
 }
@@ -351,20 +363,34 @@ void checkRat(){
 }
 
 
-/* This function is called repetitively from the main program */
+/* 
+Jocke and Edvin.
+This function is called repetitively from the main program 
+*/
 void labwork( void ) {
-
-  // When timer two has elapsed the 8th bit is a 1
   int timerHasElapsed = IFS(0) & 0x100; // 16 bit timers
-  if (timerHasElapsed){
-    timeoutcount++;
-    IFS(0) = IFS(0) & 0xFFFFFEFF;
-    if (timeoutcount == 5){
-      clearScreen();
-      moveSnake();
-      drawSnakeAndRat();
-      display_image(0, screen);
-      timeoutcount = 0;
+
+  if (gameOver) {
+    if (timerHasElapsed) {
+      gameOverCount++;
+      IFS(0) = IFS(0) & 0xFFFFFEFF;
+      displayGameOverScreen();
+      if (gameOverCount == 30) {
+        startNewGame();
+        gameOverCount = 0;
+      }
+    }
+  } else {
+    if (timerHasElapsed) {
+      timeoutcount++;
+      IFS(0) = IFS(0) & 0xFFFFFEFF;
+      if (timeoutcount == 3) {
+        clearScreen();
+        moveSnake();
+        drawSnakeAndRat();
+        display_image(0, screen);
+        timeoutcount = 0;
+      }
     }
   }
 }
