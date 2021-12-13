@@ -59,7 +59,7 @@ int main(void) {
 	
 	labinit(); // Do any game-specific initialization 
 
-	startNewGame();
+	displayStartScreen();
 
 	while( 1 )
 	{

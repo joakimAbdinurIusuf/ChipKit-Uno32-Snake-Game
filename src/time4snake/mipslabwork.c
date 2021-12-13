@@ -272,16 +272,35 @@ char intToAscii(int number) {
 
 /*
 Jocke.
-Get the first digit of a two digit number.
+Get the first digit of a three digit number.
 */
 int getFirstDigit(int number) {
-  int num = number / 10;
+  int num = number / 100;
   return num;
 }
 
 /*
 Jocke.
-Get the last digit of a two digit number.
+Get the middle digit of a three digit number.
+*/
+int getMiddleDigit(int number) {
+  if (number < 100) {
+    int num = number / 10;
+    return num;
+  } else if (number >= 100 && number < 199) {
+    number = number - 100;
+    int num2 = number / 10;
+    return num2;
+  } else {
+    number = number - 200;
+    int num2 = number / 10;
+    return num2;
+  }
+}
+
+/*
+Jocke.
+Get the last digit of a three digit number.
 */
 int getLastDigit(int number) {
   int num = number % 10;
@@ -295,13 +314,18 @@ Display game over and the score.
 void displayGameOverScreen(void) {
   char c = intToAscii(score);
   int firstDigit = getFirstDigit(score);
+  int middleDigit = getMiddleDigit(score);
   int lastDigit = getLastDigit(score);
   char firstDigitAsChar = intToAscii(firstDigit);
+  char middleDigitAsChar = intToAscii(middleDigit);
   char lastDigitAsChar = intToAscii(lastDigit);
 
-  char scoreArray[] = {'S', 'c', 'o', 'r', 'e', ':', ' ', firstDigitAsChar, lastDigitAsChar, '\0'};
+  char scoreArray[] = {'S', 'c', 'o', 'r', 'e', ':', ' ', firstDigitAsChar, middleDigitAsChar, lastDigitAsChar, '\0'};
   display_string(0, "Game over!");
   display_string(1, scoreArray);
+
+  // display_string(1, "Score: ");
+  // display_string(2, itoaconv(score));
   display_update();
 }
 
@@ -410,6 +434,24 @@ void checkRat() {
   }
 }
 
+/*
+Jocke.
+Display start screen and start the game if BTN2 is pressed.
+*/
+void displayStartScreen(void) {
+  int buttonNotPressed = 1;
+  while (buttonNotPressed) {
+    display_string(0, "Press BTN2 to");
+    display_string(1, "start playing.");
+    display_update();
+    if (getbtns() & 0x1) {
+      buttonNotPressed = 0;
+    }
+  }
+  startNewGame();
+  buttonNotPressed = 1;
+}
+
 
 /* 
 Jocke and Edvin.
@@ -424,7 +466,7 @@ void labwork( void ) {
       IFS(0) = IFS(0) & 0xFFFFFEFF;
       displayGameOverScreen();
       if (gameOverCount == 30) {
-        startNewGame();
+        displayStartScreen();
         gameOverCount = 0;
       }
     }
@@ -432,7 +474,7 @@ void labwork( void ) {
     if (timerHasElapsed) {
       timeoutcount++;
       IFS(0) = IFS(0) & 0xFFFFFEFF;
-      if (timeoutcount == 3) {
+      if (timeoutcount == 2) {
         clearScreen();
         moveSnake();
         drawSnakeAndRat();
