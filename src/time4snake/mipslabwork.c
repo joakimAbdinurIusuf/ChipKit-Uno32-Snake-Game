@@ -475,7 +475,10 @@ void displayStartScreen(void) {
   buttonNotPressed = 1;
 }
 
-
+/*
+Edvin
+Rising edge occurs if the button is pressed but wasn't pressed last time it was checked.
+*/
 int buttonRisingEdge(BTN,prevBTN){
   if(!prevBTN){
     if(BTN){
@@ -485,9 +488,15 @@ int buttonRisingEdge(BTN,prevBTN){
   return 0;
 }
 
+
+/*
+Edvin
+Reads the current value of buttons 3 and 4, and change turnDirection variable if the button is on rising edge.
+Also saves the value for next read, so that rising edge can be checked.
+*/
 void readButtons(){
-  int BTN4 = (getbtns() >> 2) & 0x1;
-  int BTN3 = (getbtns() >> 1) & 0x1;
+  int BTN4 = (getbtns() >> 2) & 0x1; //Read BTN4 1 or 0
+  int BTN3 = (getbtns() >> 1) & 0x1; //Read BTN3 1 or 0
 
   if(buttonRisingEdge(BTN3,prevBTN3)){
     turnDirection = 2; //right
@@ -511,19 +520,20 @@ void labwork( void ) {
   if (gameOver) {
     if (timerHasElapsed) {
       gameOverCount++;
-      IFS(0) = IFS(0) & 0xFFFFFEFF;
+      IFS(0) = IFS(0) & 0xFFFFFEFF; // reset timer
 
       displayGameOverScreen();
       if (gameOverCount == 90) {
         displayStartScreen();
-        gameOverCount = 0;
+        gameOverCount = 0; // reset timer loop
       }
     }
   } else {
     if (timerHasElapsed) {
       timeoutcount++;
+      IFS(0) = IFS(0) & 0xFFFFFEFF; // reset timer
+
       readButtons();
-      IFS(0) = IFS(0) & 0xFFFFFEFF;
 
       if (timeoutcount == 6){
         clearScreen();
@@ -531,7 +541,7 @@ void labwork( void ) {
         turnDirection = 1;
         drawSnakeAndRat();
         display_image(0, screen);
-        timeoutcount = 0;
+        timeoutcount = 0; // reset timer loop
       }
     }
   }
