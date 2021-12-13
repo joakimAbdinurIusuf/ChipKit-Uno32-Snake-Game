@@ -64,7 +64,7 @@ void labinit(void)
 
   int clockRate = 80000000; //80MHz
   int scale = 256;
-  int periodms = 20; // 10 gives time out about every 100ms
+  int periodms = 30; // 10 gives time out about every 100ms
   PR2 = (clockRate / scale) / periodms;
   
   TMR2 = 0; // Reset timer
@@ -508,15 +508,13 @@ void labwork( void ) {
 
   int timerHasElapsed = IFS(0) & 0x100; // 16 bit timers
 
-  readButtons();
-
   if (gameOver) {
     if (timerHasElapsed) {
       gameOverCount++;
       IFS(0) = IFS(0) & 0xFFFFFEFF;
 
       displayGameOverScreen();
-      if (gameOverCount == 60) {
+      if (gameOverCount == 90) {
         displayStartScreen();
         gameOverCount = 0;
       }
@@ -524,9 +522,10 @@ void labwork( void ) {
   } else {
     if (timerHasElapsed) {
       timeoutcount++;
+      readButtons();
       IFS(0) = IFS(0) & 0xFFFFFEFF;
 
-      if (timeoutcount == 4){
+      if (timeoutcount == 6){
         clearScreen();
         moveSnake();
         turnDirection = 1;
