@@ -383,9 +383,6 @@ void moveSnake(void) {
   int right = 2;
   int down = 3;
 
-  int BTN4 = (getbtns() >> 2) & 0x1;
-  int BTN3 = (getbtns() >> 1) & 0x1;
-
   if (direction == left) { 
     if (turnDirection == 0) { //BTN4 left
       direction = 3;
