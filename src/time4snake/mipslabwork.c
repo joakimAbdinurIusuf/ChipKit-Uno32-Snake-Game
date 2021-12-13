@@ -18,6 +18,11 @@
 #define height 8
 #define width 32
 
+#define west 0
+#define north 1
+#define east 2
+#define south 3
+
 /* Global variables */
 int snakeArray[height][width], xPos, yPos, temp, head, tail, direction;
 
@@ -378,47 +383,42 @@ in the other directions). If BTN4 is pressed, we call moveUp() and change the di
 it will simply keep moving to the right. 
 */
 void moveSnake(void) {
-  int left = 0;
-  int up = 1;
-  int right = 2;
-  int down = 3;
-
-  if (direction == left) { 
+  if (direction == west) { 
     if (turnDirection == 0) { //BTN4 left
-      direction = 3;
+      direction = south;
       moveDown();    
     } else if (turnDirection == 2) { //BTN3 right
-      direction = 1;
+      direction = north;
       moveUp();      
     } else {
       moveLeft();
     }
-  } else if (direction == up) { 
+  } else if (direction == north) { 
     if (turnDirection == 0) {
-      direction = 0;
+      direction = west;
       moveLeft();      
     } else if (turnDirection == 2) {
-      direction = 2;
+      direction = east;
       moveRight();      
     } else {
       moveUp();
     }
-  } else if (direction == right) { 
+  } else if (direction == east) { 
     if (turnDirection == 0) {
-      direction = 1;
+      direction = north;
       moveUp();      
     } else if (turnDirection == 2) {
-      direction = 3;
+      direction = south;
       moveDown();      
     } else {
       moveRight();
     }
-  } else if (direction == down) {
+  } else if (direction == south) {
     if (turnDirection == 0) {
-      direction = 2;
+      direction = east;
       moveRight();      
     } else if (turnDirection == 2) {
-      direction = 0;
+      direction = west;
       moveLeft();
     } else {
       moveDown();
