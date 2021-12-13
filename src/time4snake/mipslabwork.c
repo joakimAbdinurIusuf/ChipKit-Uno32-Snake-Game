@@ -27,7 +27,7 @@ int gameOver;
 
 int timeoutcount, gameOverCount;
 
-int score;
+int score, highscore;
 
 /* 
 Jocke and Edvin.
@@ -65,6 +65,7 @@ void labinit(void)
 
   gameOver = 0;
   score = 0;
+  highscore = 0;
 
   return;
 }
@@ -312,7 +313,6 @@ Jocke.
 Display game over and the score.
 */
 void displayGameOverScreen(void) {
-  char c = intToAscii(score);
   int firstDigit = getFirstDigit(score);
   int middleDigit = getMiddleDigit(score);
   int lastDigit = getLastDigit(score);
@@ -321,11 +321,19 @@ void displayGameOverScreen(void) {
   char lastDigitAsChar = intToAscii(lastDigit);
 
   char scoreArray[] = {'S', 'c', 'o', 'r', 'e', ':', ' ', firstDigitAsChar, middleDigitAsChar, lastDigitAsChar, '\0'};
+
+  int firstDigitHS = getFirstDigit(highscore);
+  int middleDigitHS = getMiddleDigit(highscore);
+  int lastDigitHS = getLastDigit(highscore);
+  char firstDigitAsCharHS = intToAscii(firstDigitHS);
+  char middleDigitAsCharHS = intToAscii(middleDigitHS);
+  char lastDigitAsCharHS = intToAscii(lastDigitHS);
+
+  char highScoreArray[] = {'H', 'i', 'g', 'h', 's', 'c', 'o', 'r', 'e', ':', ' ', firstDigitAsCharHS, middleDigitAsCharHS, lastDigitAsCharHS, '\0'};
+
   display_string(0, "Game over!");
   display_string(1, scoreArray);
-
-  // display_string(1, "Score: ");
-  // display_string(2, itoaconv(score));
+  display_string(2, highScoreArray);
   display_update();
 }
 
@@ -427,6 +435,9 @@ void rat(){
 void checkRat() {
   if(snakeArray[yPos][xPos] == -1) {
     score++;
+    if (highscore < score) {
+      highscore = score;
+    }
     ratExists = 0;
     rat();
   } else {
@@ -443,6 +454,7 @@ void displayStartScreen(void) {
   while (buttonNotPressed) {
     display_string(0, "Press BTN2 to");
     display_string(1, "start playing.");
+    display_string(2, "");
     display_update();
     if (getbtns() & 0x1) {
       buttonNotPressed = 0;
