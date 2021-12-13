@@ -35,7 +35,7 @@ int timeoutcount, gameOverCount;
 int score, highscore;
 
 
-int turnDirection = 1; //0 turn to the left, 1 go forward, 2 turn to the right
+int turnDirection = forward;
 int prevBTN4 = 0;
 int prevBTN3 = 0;
 
@@ -109,7 +109,7 @@ void initializeSnake(void) {
   temp = xPos;
   head = 5;
   tail = 1;
-  direction = 2; // initiate direction to be right (0 = left, 1 = up, 2 = right, 3 = down)
+  direction = east; // initiate direction to be east
 
   int i;
   for (i = 0; i < head; i++) {
