@@ -292,41 +292,41 @@ void moveSnake(void) {
 
   if (direction == left) { 
     if (turnDirection == 0) { //BTN4 left
-      moveDown();
       direction = 3;
+      moveDown();    
     } else if (turnDirection == 2) { //BTN3 right
-      moveUp();
       direction = 1;
+      moveUp();      
     } else {
       moveLeft();
     }
   } else if (direction == up) { 
     if (turnDirection == 0) {
-      moveLeft();
       direction = 0;
+      moveLeft();      
     } else if (turnDirection == 2) {
-      moveRight();
       direction = 2;
+      moveRight();      
     } else {
       moveUp();
     }
   } else if (direction == right) { 
     if (turnDirection == 0) {
-      moveUp();
       direction = 1;
+      moveUp();      
     } else if (turnDirection == 2) {
-      moveDown();
       direction = 3;
+      moveDown();      
     } else {
       moveRight();
     }
   } else if (direction == down) {
     if (turnDirection == 0) {
-      moveRight();
       direction = 2;
+      moveRight();      
     } else if (turnDirection == 2) {
-      moveLeft();
       direction = 0;
+      moveLeft();
     } else {
       moveDown();
     }
