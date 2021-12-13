@@ -25,6 +25,7 @@ char textstring[] = "text, more text, and even more text!";
 
 int snakeArray[height][width], xPos, yPos, temp, head, tail, direction, ratExists; // Jocke and Edvin
 
+int timeoutcount;
 /* 
 Jocke and Edvin.
 Interrupt Service Routine 
@@ -46,6 +47,18 @@ void labinit(void)
   // 1e)
   // 0000 1111 1110 0000 -> 0x0fe0
   TRISD = TRISD | 0xfe0;
+
+
+  // 2b) Se page 9 i Timer manualen.
+  T2CON = 0x70; // Set bit 4-6 to 111 -> 0000...0111 0000 -> 0x70 and set on bit to 0
+
+  int clockRate = 80000000; //80MHz
+  int scale = 256;
+  int periodms = 10;
+  PR2 = (clockRate / scale) / periodms;
+  
+  TMR2 = 0; // Reset timer
+  T2CONSET = 0x8000; // Start the timer
 
   return;
 }
@@ -340,9 +353,18 @@ void checkRat(){
 
 /* This function is called repetitively from the main program */
 void labwork( void ) {
-  delay(300);
-  clearScreen();
-  moveSnake();
-  drawSnakeAndRat();
-  display_image(0, screen);
+
+  // When timer two has elapsed the 8th bit is a 1
+  int timerHasElapsed = IFS(0) & 0x100; // 16 bit timers
+  if (timerHasElapsed){
+    timeoutcount++;
+    IFS(0) = IFS(0) & 0xFFFFFEFF;
+    if (timeoutcount == 5){
+      clearScreen();
+      moveSnake();
+      drawSnakeAndRat();
+      display_image(0, screen);
+      timeoutcount = 0;
+    }
+  }
 }
