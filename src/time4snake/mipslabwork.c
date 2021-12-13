@@ -28,6 +28,7 @@ int gameOver;
 int timeoutcount, gameOverCount;
 
 int score;
+
 /* 
 Jocke and Edvin.
 Interrupt Service Routine 
@@ -151,9 +152,7 @@ to head.
 void moveLeft(void) {
   xPos--;
   head++;
-  checkRat();
-  checkGameOver();
-  snakeArray[yPos][xPos] = head;
+  gameOverOrCheckRat();
 }
 
 /*
@@ -166,9 +165,7 @@ to head.
 void moveRight(void) {
   xPos++;
   head++;
-  checkRat();
-  checkGameOver();
-  snakeArray[yPos][xPos] = head;
+  gameOverOrCheckRat();
 }
 
 /*
@@ -181,9 +178,7 @@ to head.
 void moveUp(void) {
   yPos--;
   head++;
-  checkRat();
-  checkGameOver();
-  snakeArray[yPos][xPos] = head;
+  gameOverOrCheckRat();
 }
 
 /*
@@ -196,9 +191,21 @@ to head.
 void moveDown(void) {
   yPos++;
   head++;
-  checkRat();
-  checkGameOver();
-  snakeArray[yPos][xPos] = head;
+  gameOverOrCheckRat();
+}
+
+/*
+Jocke och Edvin.
+Fixes bug where score is increased if one crashes into the top wall.
+*/
+void gameOverOrCheckRat(void) {
+  if (checkGameOver()) {
+    delay(1000);
+    gameOver = 1;
+  } else {
+    checkRat();
+    snakeArray[yPos][xPos] = head;
+  }
 }
 
 /*
@@ -246,10 +253,11 @@ Jocke.
 Called in moveLeft, moveRight, moveUp and moveDown. Check the cases where the 
 snake dies, i.e. when it hits a wall or itself.
 */
-void checkGameOver(void) {
+int checkGameOver() {
   if (hitSideWall() || hitUpperOrLowerWall() || snakeCollidedWithItself()) {
-    delay(1000);
-    gameOver = 1;
+    return 1;
+  } else {
+    return 0;
   }
 }
 
@@ -268,6 +276,7 @@ Get the first digit of a two digit number.
 */
 int getFirstDigit(int number) {
   int num = number / 10;
+  return num;
 }
 
 /*
@@ -276,6 +285,7 @@ Get the last digit of a two digit number.
 */
 int getLastDigit(int number) {
   int num = number % 10;
+  return num;
 }
 
 /*
