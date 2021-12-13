@@ -405,7 +405,7 @@ void labwork( void ) {
 
 
     IFS(0) = IFS(0) & 0xFFFFFEFF;
-    if (timeoutcount == 10){
+    if (timeoutcount == 6){
       clearScreen();
       moveSnake();
       turnDirection = 1;
