@@ -496,7 +496,7 @@ void labwork( void ) {
       gameOverCount++;
       IFS(0) = IFS(0) & 0xFFFFFEFF;
       displayGameOverScreen();
-      if (gameOverCount == 30) {
+      if (gameOverCount == 90) {
         displayStartScreen();
         gameOverCount = 0;
       }
