@@ -64,7 +64,7 @@ void labinit(void)
 
   int clockRate = 80000000; //80MHz
   int scale = 256;
-  int periodms = 30; // 10 gives time out about every 100ms
+  int periodms = 20; // 10 gives time out about every 100ms
   PR2 = (clockRate / scale) / periodms;
   
   TMR2 = 0; // Reset timer
@@ -453,14 +453,7 @@ void checkRat() {
   }
 }
 
-int buttonOnTurn(BTN,prevBTN){
-  if(!prevBTN){
-    if(BTN){
-      return 1;
-    }
-  }
-  return 0;
-}
+
 
 
 /*
@@ -483,6 +476,30 @@ void displayStartScreen(void) {
 }
 
 
+int buttonRisingEdge(BTN,prevBTN){
+  if(!prevBTN){
+    if(BTN){
+      return 1;
+    }
+  }
+  return 0;
+}
+
+void readButtons(){
+  int BTN4 = (getbtns() >> 2) & 0x1;
+  int BTN3 = (getbtns() >> 1) & 0x1;
+
+  if(buttonRisingEdge(BTN3,prevBTN3)){
+    turnDirection = 2; //right
+  }
+  if(buttonRisingEdge(BTN4, prevBTN4)){
+    turnDirection = 0; //left
+  }
+  prevBTN3 = BTN3;
+  prevBTN4 = BTN4;
+}
+
+
 /* 
 Jocke and Edvin.
 This function is called repetitively from the main program 
@@ -491,12 +508,15 @@ void labwork( void ) {
 
   int timerHasElapsed = IFS(0) & 0x100; // 16 bit timers
 
+  readButtons();
+
   if (gameOver) {
     if (timerHasElapsed) {
       gameOverCount++;
       IFS(0) = IFS(0) & 0xFFFFFEFF;
+
       displayGameOverScreen();
-      if (gameOverCount == 90) {
+      if (gameOverCount == 60) {
         displayStartScreen();
         gameOverCount = 0;
       }
@@ -504,32 +524,9 @@ void labwork( void ) {
   } else {
     if (timerHasElapsed) {
       timeoutcount++;
-    
-      
-      int BTN4 = (getbtns() >> 2) & 0x1;
-      int BTN3 = (getbtns() >> 1) & 0x1;
-      //PORTE=BTN3;
-      if(BTN4 > prevBTN4){
-        PORTE++;
-      }
-
-      if(buttonOnTurn(BTN3,prevBTN3)){
-        turnDirection = 2; //right
-        //PORTE++;
-      }
-      if(buttonOnTurn(BTN4, prevBTN4)){
-        turnDirection = 0; //left
-      }
-
-      //PORTE = turnDirection+1;
-
-      prevBTN3 = BTN3;
-      prevBTN4 = BTN4;
-
-
-
       IFS(0) = IFS(0) & 0xFFFFFEFF;
-      if (timeoutcount == 6){
+
+      if (timeoutcount == 4){
         clearScreen();
         moveSnake();
         turnDirection = 1;
