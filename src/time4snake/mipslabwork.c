@@ -26,6 +26,7 @@ char textstring[] = "text, more text, and even more text!";
 int snakeArray[height][width], xPos, yPos, temp, head, tail, direction, ratExists; // Jocke and Edvin
 
 int turnDirection; //0 turn to the left, 1 go forward, 2 turn to the right
+int prevBTN4, prevBTN3;
 
 int timeoutcount;
 /* 
@@ -353,6 +354,16 @@ void checkRat(){
   }
 }
 
+int buttonOnTurn(BTN,prevBTN){
+  if(!prevBTN){
+    if(BTN){
+      return 1;
+    }
+  }
+  return 0;
+}
+
+
 
 /* This function is called repetitively from the main program */
 void labwork( void ) {
@@ -360,17 +371,19 @@ void labwork( void ) {
 
   int BTN4 = (getbtns() >> 2) & 0x1;
   int BTN3 = (getbtns() >> 1) & 0x1;
-
-  //0 turn to the left, 1 go forward, 2 turn to the right
-  if(BTN4){
-    turnDirection = 0; //left
-  }
-  if(BTN3){
+  
+  
+  if(buttonOnTurn(BTN3,prevBTN3)){
     turnDirection = 2; //right
   }
-  if(timeoutcount<=1){
-    turnDirection = 1; // forward
+  if(buttonOnTurn(BTN4, prevBTN4)){
+    turnDirection = 0; //left
   }
+
+  prevBTN3 = BTN3;
+  prevBTN4 = BTN4;
+  
+
 
   // When timer two has elapsed the 8th bit is a 1
   int timerHasElapsed = IFS(0) & 0x100; // 16 bit timers
