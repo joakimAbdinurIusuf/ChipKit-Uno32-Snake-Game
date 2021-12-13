@@ -410,6 +410,24 @@ void checkRat() {
   }
 }
 
+/*
+Jocke.
+Display start screen and start the game if BTN2 is pressed.
+*/
+void displayStartScreen(void) {
+  int buttonNotPressed = 1;
+  while (buttonNotPressed) {
+    display_string(0, "Press BTN2 to");
+    display_string(1, "start playing.");
+    display_update();
+    if (getbtns() & 0x1) {
+      buttonNotPressed = 0;
+    }
+  }
+  startNewGame();
+  buttonNotPressed = 1;
+}
+
 
 /* 
 Jocke and Edvin.
@@ -424,7 +442,7 @@ void labwork( void ) {
       IFS(0) = IFS(0) & 0xFFFFFEFF;
       displayGameOverScreen();
       if (gameOverCount == 30) {
-        startNewGame();
+        displayStartScreen();
         gameOverCount = 0;
       }
     }
@@ -432,7 +450,7 @@ void labwork( void ) {
     if (timerHasElapsed) {
       timeoutcount++;
       IFS(0) = IFS(0) & 0xFFFFFEFF;
-      if (timeoutcount == 3) {
+      if (timeoutcount == 2) {
         clearScreen();
         moveSnake();
         drawSnakeAndRat();

@@ -46,6 +46,8 @@ void moveSnake(void);
 void displayGameOverScreen(void);
 void startNewGame(void);
 void gameOverOrCheckRat(void);
+void displayStartScreen(void);
+void clearText(void);
 
 /* Declare display_debug - a function to help debugging.
 
