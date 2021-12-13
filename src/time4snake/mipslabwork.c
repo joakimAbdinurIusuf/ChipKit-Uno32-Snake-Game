@@ -19,13 +19,16 @@
 #define width 32
 
 /* Global variables */
-int mytime = 0x5957;
+int snakeArray[height][width], xPos, yPos, temp, head, tail, direction;
 
-char textstring[] = "text, more text, and even more text!";
+int ratExists; 
 
-int snakeArray[height][width], xPos, yPos, temp, head, tail, direction, ratExists; // Jocke and Edvin
+int gameOver; 
 
-int timeoutcount;
+int timeoutcount, gameOverCount;
+
+int score;
+
 /* 
 Jocke and Edvin.
 Interrupt Service Routine 
@@ -59,6 +62,9 @@ void labinit(void)
   
   TMR2 = 0; // Reset timer
   T2CONSET = 0x8000; // Start the timer
+
+  gameOver = 0;
+  score = 0;
 
   return;
 }
@@ -146,9 +152,7 @@ to head.
 void moveLeft(void) {
   xPos--;
   head++;
-  checkRat();
-  checkGameOver();
-  snakeArray[yPos][xPos] = head;
+  gameOverOrCheckRat();
 }
 
 /*
@@ -161,9 +165,7 @@ to head.
 void moveRight(void) {
   xPos++;
   head++;
-  checkRat();
-  checkGameOver();
-  snakeArray[yPos][xPos] = head;
+  gameOverOrCheckRat();
 }
 
 /*
@@ -176,9 +178,7 @@ to head.
 void moveUp(void) {
   yPos--;
   head++;
-  checkRat();
-  checkGameOver();
-  snakeArray[yPos][xPos] = head;
+  gameOverOrCheckRat();
 }
 
 /*
@@ -191,9 +191,21 @@ to head.
 void moveDown(void) {
   yPos++;
   head++;
-  checkRat();
-  checkGameOver();
-  snakeArray[yPos][xPos] = head;
+  gameOverOrCheckRat();
+}
+
+/*
+Jocke och Edvin.
+Fixes bug where score is increased if one crashes into the top wall.
+*/
+void gameOverOrCheckRat(void) {
+  if (checkGameOver()) {
+    delay(1000);
+    gameOver = 1;
+  } else {
+    checkRat();
+    snakeArray[yPos][xPos] = head;
+  }
 }
 
 /*
@@ -237,15 +249,60 @@ int snakeCollidedWithItself() {
 }
 
 /*
-Jocke and Edvin.
+Jocke.
 Called in moveLeft, moveRight, moveUp and moveDown. Check the cases where the 
 snake dies, i.e. when it hits a wall or itself.
 */
-void checkGameOver(void) {
-  if (hitSideWall() || hitUpperOrLowerWall() || snakeCollidedWithItself())  {
-    delay(1000);
-    startNewGame();
+int checkGameOver() {
+  if (hitSideWall() || hitUpperOrLowerWall() || snakeCollidedWithItself()) {
+    return 1;
+  } else {
+    return 0;
   }
+}
+
+/*
+Jocke.
+Convert number to its' corresponding ascii value.
+*/
+char intToAscii(int number) {
+  char num = number + 48;
+  return num;
+}
+
+/*
+Jocke.
+Get the first digit of a two digit number.
+*/
+int getFirstDigit(int number) {
+  int num = number / 10;
+  return num;
+}
+
+/*
+Jocke.
+Get the last digit of a two digit number.
+*/
+int getLastDigit(int number) {
+  int num = number % 10;
+  return num;
+}
+
+/*
+Jocke.
+Display game over and the score.
+*/
+void displayGameOverScreen(void) {
+  char c = intToAscii(score);
+  int firstDigit = getFirstDigit(score);
+  int lastDigit = getLastDigit(score);
+  char firstDigitAsChar = intToAscii(firstDigit);
+  char lastDigitAsChar = intToAscii(lastDigit);
+
+  char scoreArray[] = {'S', 'c', 'o', 'r', 'e', ':', ' ', firstDigitAsChar, lastDigitAsChar, '\0'};
+  display_string(0, "Game over!");
+  display_string(1, scoreArray);
+  display_update();
 }
 
 /*
@@ -254,7 +311,9 @@ Start a new game by initializing the snake and setting rat exists to 0.
 */
 void startNewGame(void) {
   initializeSnake(); 
+  gameOver = 0;
   ratExists = 0;
+  score = 0;
   rat();
 }
 
@@ -341,9 +400,10 @@ void rat(){
   }
 }
 
-void checkRat(){
-  if(snakeArray[yPos][xPos]==-1){
-    ratExists=0;
+void checkRat() {
+  if(snakeArray[yPos][xPos] == -1) {
+    score++;
+    ratExists = 0;
     rat();
   } else {
     removeTail();
@@ -351,20 +411,34 @@ void checkRat(){
 }
 
 
-/* This function is called repetitively from the main program */
+/* 
+Jocke and Edvin.
+This function is called repetitively from the main program 
+*/
 void labwork( void ) {
-
-  // When timer two has elapsed the 8th bit is a 1
   int timerHasElapsed = IFS(0) & 0x100; // 16 bit timers
-  if (timerHasElapsed){
-    timeoutcount++;
-    IFS(0) = IFS(0) & 0xFFFFFEFF;
-    if (timeoutcount == 5){
-      clearScreen();
-      moveSnake();
-      drawSnakeAndRat();
-      display_image(0, screen);
-      timeoutcount = 0;
+
+  if (gameOver) {
+    if (timerHasElapsed) {
+      gameOverCount++;
+      IFS(0) = IFS(0) & 0xFFFFFEFF;
+      displayGameOverScreen();
+      if (gameOverCount == 30) {
+        startNewGame();
+        gameOverCount = 0;
+      }
+    }
+  } else {
+    if (timerHasElapsed) {
+      timeoutcount++;
+      IFS(0) = IFS(0) & 0xFFFFFEFF;
+      if (timeoutcount == 3) {
+        clearScreen();
+        moveSnake();
+        drawSnakeAndRat();
+        display_image(0, screen);
+        timeoutcount = 0;
+      }
     }
   }
 }
