@@ -19,13 +19,15 @@
 #define width 32
 
 /* Global variables */
-int mytime = 0x5957;
+int snakeArray[height][width], xPos, yPos, temp, head, tail, direction;
 
-char textstring[] = "text, more text, and even more text!";
+int ratExists; 
 
-int snakeArray[height][width], xPos, yPos, temp, head, tail, direction, ratExists, gameOver; // Jocke and Edvin
+int gameOver; 
 
 int timeoutcount, gameOverCount;
+
+int score;
 /* 
 Jocke and Edvin.
 Interrupt Service Routine 
@@ -61,6 +63,7 @@ void labinit(void)
   T2CONSET = 0x8000; // Start the timer
 
   gameOver = 0;
+  score = 0;
 
   return;
 }
@@ -250,13 +253,56 @@ void checkGameOver(void) {
   }
 }
 
+char intToAscii(int number) {
+  char num = number + 48;
+  return num;
+}
+
+int getFirstDigit(int number) {
+  int num = number / 10;
+}
+
+int getLastDigit(int number) {
+  int num = number % 10;
+}
+
 /*
 Jocke.
-...
+Display game over and the score.
 */
 void displayGameOverScreen(void) {
+  char c = intToAscii(score);
+  int firstDigit = getFirstDigit(score);
+  int lastDigit = getLastDigit(score);
+  char firstDigitAsChar = intToAscii(firstDigit);
+  char lastDigitAsChar = intToAscii(lastDigit);
+
+  char scoreArray[] = {'S', 'c', 'o', 'r', 'e', ':', ' ', firstDigitAsChar, lastDigitAsChar, '\0'};
   display_string(0, "Game over!");
+  display_string(1, scoreArray);
   display_update();
+
+
+  /*
+  display_string(0, "Game over!");
+  char scoreChar[] = {'S', 'c', 'o', 'r', 'e', ':', ' ', hexasc(score), '\0'};
+  display_string(1, scoreChar);
+  display_update();
+  */
+    
+  /*
+  if (score < 10) {
+    char scoreChar[7] = {'S', 'c', 'o', 'r', 'e', ':', ' ', hexasc(score)};
+    // char* scoreChar_ptr = &scoreChar[7];
+    display_string(1, scoreChar);
+    display_update();
+  } else {
+    char scoreChar = score + '10';
+    char* scoreChar_ptr = &scoreChar;
+    display_string(1, scoreChar_ptr);
+    display_update();
+  }
+  */
 }
 
 /*
@@ -267,6 +313,7 @@ void startNewGame(void) {
   initializeSnake(); 
   gameOver = 0;
   ratExists = 0;
+  score = 0;
   rat();
 }
 
@@ -353,9 +400,10 @@ void rat(){
   }
 }
 
-void checkRat(){
-  if(snakeArray[yPos][xPos]==-1){
-    ratExists=0;
+void checkRat() {
+  if(snakeArray[yPos][xPos] == -1) {
+    score++;
+    ratExists = 0;
     rat();
   } else {
     removeTail();
