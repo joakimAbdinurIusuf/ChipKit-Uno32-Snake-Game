@@ -242,7 +242,7 @@ int snakeCollidedWithItself() {
 }
 
 /*
-Jocke and Edvin.
+Jocke.
 Called in moveLeft, moveRight, moveUp and moveDown. Check the cases where the 
 snake dies, i.e. when it hits a wall or itself.
 */
@@ -253,15 +253,27 @@ void checkGameOver(void) {
   }
 }
 
+/*
+Jocke.
+Convert number to its' corresponding ascii value.
+*/
 char intToAscii(int number) {
   char num = number + 48;
   return num;
 }
 
+/*
+Jocke.
+Get the first digit of a two digit number.
+*/
 int getFirstDigit(int number) {
   int num = number / 10;
 }
 
+/*
+Jocke.
+Get the last digit of a two digit number.
+*/
 int getLastDigit(int number) {
   int num = number % 10;
 }
@@ -281,28 +293,6 @@ void displayGameOverScreen(void) {
   display_string(0, "Game over!");
   display_string(1, scoreArray);
   display_update();
-
-
-  /*
-  display_string(0, "Game over!");
-  char scoreChar[] = {'S', 'c', 'o', 'r', 'e', ':', ' ', hexasc(score), '\0'};
-  display_string(1, scoreChar);
-  display_update();
-  */
-    
-  /*
-  if (score < 10) {
-    char scoreChar[7] = {'S', 'c', 'o', 'r', 'e', ':', ' ', hexasc(score)};
-    // char* scoreChar_ptr = &scoreChar[7];
-    display_string(1, scoreChar);
-    display_update();
-  } else {
-    char scoreChar = score + '10';
-    char* scoreChar_ptr = &scoreChar;
-    display_string(1, scoreChar_ptr);
-    display_update();
-  }
-  */
 }
 
 /*
