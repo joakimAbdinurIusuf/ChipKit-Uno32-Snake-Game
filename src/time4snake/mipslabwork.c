@@ -25,8 +25,9 @@ char textstring[] = "text, more text, and even more text!";
 
 int snakeArray[height][width], xPos, yPos, temp, head, tail, direction, ratExists; // Jocke and Edvin
 
-int turnDirection; //0 turn to the left, 1 go forward, 2 turn to the right
-int prevBTN4, prevBTN3;
+int turnDirection = 1; //0 turn to the left, 1 go forward, 2 turn to the right
+int prevBTN4 = 0;
+int prevBTN3 = 0;
 
 int timeoutcount;
 /* 
@@ -46,7 +47,7 @@ void labinit(void)
   // 1c) 
   volatile int* trise = (volatile int*) 0xbf886100; 
   *trise = (*trise) & 0xffffff00; 
-  
+  PORTE=0;
   // 1e)
   // 0000 1111 1110 0000 -> 0x0fe0
   TRISD = TRISD | 0xfe0;
@@ -369,26 +370,38 @@ int buttonOnTurn(BTN,prevBTN){
 void labwork( void ) {
   
 
-  int BTN4 = (getbtns() >> 2) & 0x1;
-  int BTN3 = (getbtns() >> 1) & 0x1;
-  
-  
-  if(buttonOnTurn(BTN3,prevBTN3)){
-    turnDirection = 2; //right
-  }
-  if(buttonOnTurn(BTN4, prevBTN4)){
-    turnDirection = 0; //left
-  }
-
-  prevBTN3 = BTN3;
-  prevBTN4 = BTN4;
-  
 
 
   // When timer two has elapsed the 8th bit is a 1
   int timerHasElapsed = IFS(0) & 0x100; // 16 bit timers
   if (timerHasElapsed){
     timeoutcount++;
+    
+
+
+
+    int BTN4 = (getbtns() >> 2) & 0x1;
+    int BTN3 = (getbtns() >> 1) & 0x1;
+    //PORTE=BTN3;
+    if(BTN4 > prevBTN4){
+      PORTE++;
+    }
+
+    if(buttonOnTurn(BTN3,prevBTN3)){
+      turnDirection = 2; //right
+      //PORTE++;
+    }
+    if(buttonOnTurn(BTN4, prevBTN4)){
+      turnDirection = 0; //left
+    }
+
+    //PORTE = turnDirection+1;
+
+    prevBTN3 = BTN3;
+    prevBTN4 = BTN4;
+    
+
+
 
 
     IFS(0) = IFS(0) & 0xFFFFFEFF;
