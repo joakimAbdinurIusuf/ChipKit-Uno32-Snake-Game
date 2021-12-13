@@ -58,7 +58,7 @@ void labinit(void)
 
   int clockRate = 80000000; //80MHz
   int scale = 256;
-  int periodms = 10;
+  int periodms = 30; // 10 gives time out about every 100ms
   PR2 = (clockRate / scale) / periodms;
   
   TMR2 = 0; // Reset timer
@@ -405,7 +405,7 @@ void labwork( void ) {
 
 
     IFS(0) = IFS(0) & 0xFFFFFEFF;
-    if (timeoutcount == 4){
+    if (timeoutcount == 10){
       clearScreen();
       moveSnake();
       turnDirection = 1;
