@@ -25,6 +25,8 @@ char textstring[] = "text, more text, and even more text!";
 
 int snakeArray[height][width], xPos, yPos, temp, head, tail, direction, ratExists; // Jocke and Edvin
 
+int turnDirection; //0 turn to the left, 1 go forward, 2 turn to the right
+
 int timeoutcount;
 /* 
 Jocke and Edvin.
@@ -256,6 +258,7 @@ void startNewGame(void) {
   initializeSnake(); 
   ratExists = 0;
   rat();
+  turnDirection = 1; //Forward
 }
 
 /*
@@ -288,40 +291,40 @@ void moveSnake(void) {
   int BTN3 = (getbtns() >> 1) & 0x1;
 
   if (direction == left) { 
-    if (BTN4) {
+    if (turnDirection == 0) { //BTN4 left
       moveDown();
       direction = 3;
-    } else if (BTN3) {
+    } else if (turnDirection == 2) { //BTN3 right
       moveUp();
       direction = 1;
     } else {
       moveLeft();
     }
   } else if (direction == up) { 
-    if (BTN4) {
+    if (turnDirection == 0) {
       moveLeft();
       direction = 0;
-    } else if (BTN3) {
+    } else if (turnDirection == 2) {
       moveRight();
       direction = 2;
     } else {
       moveUp();
     }
   } else if (direction == right) { 
-    if (BTN4) {
+    if (turnDirection == 0) {
       moveUp();
       direction = 1;
-    } else if (BTN3) {
+    } else if (turnDirection == 2) {
       moveDown();
       direction = 3;
     } else {
       moveRight();
     }
   } else if (direction == down) {
-    if (BTN4) {
+    if (turnDirection == 0) {
       moveRight();
       direction = 2;
-    } else if (BTN3) {
+    } else if (turnDirection == 2) {
       moveLeft();
       direction = 0;
     } else {
@@ -353,15 +356,33 @@ void checkRat(){
 
 /* This function is called repetitively from the main program */
 void labwork( void ) {
+  
+
+  int BTN4 = (getbtns() >> 2) & 0x1;
+  int BTN3 = (getbtns() >> 1) & 0x1;
+
+  //0 turn to the left, 1 go forward, 2 turn to the right
+  if(BTN4){
+    turnDirection = 0; //left
+  }
+  if(BTN3){
+    turnDirection = 2; //right
+  }
+  if(timeoutcount<=1){
+    turnDirection = 1; // forward
+  }
 
   // When timer two has elapsed the 8th bit is a 1
   int timerHasElapsed = IFS(0) & 0x100; // 16 bit timers
   if (timerHasElapsed){
     timeoutcount++;
+
+
     IFS(0) = IFS(0) & 0xFFFFFEFF;
-    if (timeoutcount == 5){
+    if (timeoutcount == 4){
       clearScreen();
       moveSnake();
+      turnDirection = 1;
       drawSnakeAndRat();
       display_image(0, screen);
       timeoutcount = 0;
