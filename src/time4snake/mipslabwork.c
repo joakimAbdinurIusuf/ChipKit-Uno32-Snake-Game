@@ -23,6 +23,10 @@
 #define east 2
 #define south 3
 
+#define left 0
+#define forward 1
+#define right 2
+
 /* Global variables */
 int snakeArray[height][width], xPos, yPos, temp, head, tail, direction;
 
@@ -359,7 +363,7 @@ void startNewGame(void) {
   ratExists = 0;
   score = 0;
   rat();
-  turnDirection = 1; //Forward
+  turnDirection = forward;
 }
 
 /*
@@ -384,40 +388,40 @@ it will simply keep moving to the right.
 */
 void moveSnake(void) {
   if (direction == west) { 
-    if (turnDirection == 0) { //BTN4 left
+    if (turnDirection == left) { //BTN4 left
       direction = south;
       moveDown();    
-    } else if (turnDirection == 2) { //BTN3 right
+    } else if (turnDirection == right) { //BTN3 right
       direction = north;
       moveUp();      
     } else {
       moveLeft();
     }
   } else if (direction == north) { 
-    if (turnDirection == 0) {
+    if (turnDirection == left) {
       direction = west;
       moveLeft();      
-    } else if (turnDirection == 2) {
+    } else if (turnDirection == right) {
       direction = east;
       moveRight();      
     } else {
       moveUp();
     }
   } else if (direction == east) { 
-    if (turnDirection == 0) {
+    if (turnDirection == left) {
       direction = north;
       moveUp();      
-    } else if (turnDirection == 2) {
+    } else if (turnDirection == right) {
       direction = south;
       moveDown();      
     } else {
       moveRight();
     }
   } else if (direction == south) {
-    if (turnDirection == 0) {
+    if (turnDirection == left) {
       direction = east;
       moveRight();      
-    } else if (turnDirection == 2) {
+    } else if (turnDirection == right) {
       direction = west;
       moveLeft();
     } else {
@@ -496,10 +500,10 @@ void readButtons(){
   int BTN3 = (getbtns() >> 1) & 0x1; //Read BTN3 1 or 0
 
   if(buttonRisingEdge(BTN3,prevBTN3)){
-    turnDirection = 2; //right
+    turnDirection = right;
   }
   if(buttonRisingEdge(BTN4, prevBTN4)){
-    turnDirection = 0; //left
+    turnDirection = left;
   }
   prevBTN3 = BTN3;
   prevBTN4 = BTN4;
@@ -535,7 +539,7 @@ void labwork( void ) {
       if (timeoutcount == 6){
         clearScreen();
         moveSnake();
-        turnDirection = 1;
+        turnDirection = forward;
         drawSnakeAndRat();
         display_image(0, screen);
         timeoutcount = 0; // reset timer loop
