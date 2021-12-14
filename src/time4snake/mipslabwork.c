@@ -498,7 +498,10 @@ void readButtons(){
 
 /* 
 Jocke and Edvin.
-This function is called repetitively from the main program 
+This function is called repetitively from the main program.
+It uses a timer, and the timer has to time out a certain amount of times
+before the game logic runs once. The loop then resets and the timer has to
+go out the same amount of times again.
 */
 void labwork( void ) {
 
@@ -506,7 +509,7 @@ void labwork( void ) {
 
   if (gameOver) {
     if (timerHasElapsed) {
-      gameOverCount++;
+      gameOverCount++; //a time out count for the game over screen
       IFS(0) = IFS(0) & 0xFFFFFEFF; // reset timer
 
       displayGameOverScreen();
