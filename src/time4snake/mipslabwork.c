@@ -226,27 +226,13 @@ void gameOverOrCheckRat(void) {
 }
 
 /*
-Jocke.
-Valid x-positions range from 0 to 31 (inclusive). So if xPos
-is less than 0 or greater than 31 the snake is outside of the screen.
+Jocke and Edvin.
+Valid y-positions range from 0 to 7 (inclusive), and valid x-positions range from 0 to 31 (inclusive).
+So if yPos is less than 0 or greater than 7, or if xPos is less than 0 or greater than 31 the snake is outside of the screen.
 This means it has hit a wall and should die.
 */
-int hitSideWall() {
-  if (xPos < 0 || xPos > 31) {
-    return 1;
-  } else {
-    return 0;
-  }
-}
-
-/*
-Jocke.
-Valid y-positions range from 0 to 7 (inclusive). So if yPos
-is less than 0 or greater than 7 the snake is outside of the screen.
-This means it has hit a wall and should die.
-*/
-int hitUpperOrLowerWall() {
-  if (yPos < 0 || yPos > 7) {
+int hitsWall() {
+  if (xPos < 0 || xPos > 31 || yPos < 0 || yPos > 7) {
     return 1;
   } else {
     return 0;
@@ -271,7 +257,7 @@ Called in moveWest, moveEast, moveNorth and moveSouth. Check the cases where the
 snake dies, i.e. when it hits a wall or itself.
 */
 int checkGameOver() {
-  if (hitSideWall() || hitUpperOrLowerWall() || snakeCollidedWithItself()) {
+  if (hitsWall() || snakeCollidedWithItself()) {
     return 1;
   } else {
     return 0;
