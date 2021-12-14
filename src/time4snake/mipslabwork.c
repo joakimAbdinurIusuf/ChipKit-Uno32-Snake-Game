@@ -15,14 +15,18 @@
 #include <pic32mx.h>  /* Declarations of system-specific addresses etc */
 #include "mipslab.h"  /* Declatations for these labs */
 
+
+// Dimensions of the game field (see snakeArray) where each coordinate is 4*4 pixels.
 #define height 8
 #define width 32
 
+// The directions the snake can be facing.
 #define west 0
 #define north 1
 #define east 2
 #define south 3
 
+// The directions the snake can be turning.
 #define left 0
 #define forward 1
 #define right 2
