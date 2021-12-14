@@ -23,6 +23,8 @@ static void num32asc( char * s, int );
 #define DISPLAY_TURN_OFF_VDD (PORTFSET = 0x40)
 #define DISPLAY_TURN_OFF_VBAT (PORTFSET = 0x20)
 
+int seed = 12345; //should be less than 65537 (m)
+
 /* Our functions  */
 
 /*
@@ -37,13 +39,8 @@ void clearScreen(void) {
 }
 
 /*
+Edvin.
 Mark individual pixels on the OLED display.
-
-The code below is equal to:
-- if(y<8)        row=0;
-- if (8<=y<16)   row=1;
-- if (16<=y<24)  row=2;
-- if (24<=y<32)  row=3;
 */
 void changePixel(int x, int y, int value){
   int row = y/8; //row 0-3  on the display
@@ -83,7 +80,10 @@ void drawBlock(int row, int column) {
   }
 }
 
-int seed = 12345; //should be less than 65537 (m)
+/*
+Edvin.
+Generate a random number.
+*/
 int rand(){
   seed++;
   int m = 2<<15 + 1;
