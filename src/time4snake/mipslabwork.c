@@ -107,7 +107,7 @@ void initializeSnake(void) {
 }
 
 /*
-Jocke.
+Jocke and Edvin.
 Draw the snake. Loop through the entire snake array. If it isn't 0,
 the block at snakeArray[i][j] is either the snake (values greater than zero),
 or a rat (value of -1). We then draw a white block in this positions. 
@@ -421,9 +421,13 @@ void moveSnake(void) {
   }
 }
 
+/*
+Edvin.
+Spawn the rat in a random position.
+*/
 void rat(){
   while(!ratExists){
-    int xRat = rand() % 32; // add time function later?
+    int xRat = rand() % 32; 
     int yRat = rand() % 8;
     if(snakeArray[yRat][xRat]==0){
       snakeArray[yRat][xRat]=-1;
@@ -432,6 +436,12 @@ void rat(){
   }
 }
 
+/*
+Edvin and Jocke.
+Check if the position of the snakes head is the same as that of the rat.
+If it is, increase the score and check to the if the current score is a new high score.
+Otherwise, simply remove the tail. This function is called each time the snake moves.
+*/
 void checkRat() {
   if(snakeArray[yPos][xPos] == -1) {
     score++;
@@ -467,9 +477,11 @@ void displayStartScreen(void) {
 
 /* 
 Jocke and Edvin.
-This function is called repetitively from the main program 
+This function is called repetitively from the main program.
+A better name for the function would be gameLoop but because of
+dependencies we will keep its' original name.
 */
-void labwork( void ) {
+void labwork(void) {
   int timerHasElapsed = IFS(0) & 0x100; // 16 bit timers
 
   if (gameOver) {
