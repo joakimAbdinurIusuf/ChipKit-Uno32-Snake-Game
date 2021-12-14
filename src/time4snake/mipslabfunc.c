@@ -37,13 +37,13 @@ void clearScreen(void) {
 }
 
 /*
+Edvin.
 Mark individual pixels on the OLED display.
 
-The code below is equal to:
-- if(y<8)        row=0;
-- if (8<=y<16)   row=1;
-- if (16<=y<24)  row=2;
-- if (24<=y<32)  row=3;
+Sets the bit corresponding to pixel (x,y) on the 
+display to 0 if value = 0 and to 1 if value! = 0.
+
+A bit that's 1 gives a black pixel and a bit that's 0 gives a white pixel.
 */
 void changePixel(int x, int y, int value){
   int row = y/8; //row 0-3  on the display
@@ -83,6 +83,11 @@ void drawBlock(int row, int column) {
   }
 }
 
+/*
+Edvin.
+Gives a sequence of random numbers, one new number everytime it's called. Not very advanced,
+but good enough for this snake game. (Sequence repeats when the program restarts.)
+*/
 int seed = 12345; //should be less than 65537 (m)
 int rand(){
   seed++;
@@ -91,6 +96,8 @@ int rand(){
   int c = 74;
   return (a*seed+c) % m;
 }
+
+
 
 /* End of our functions  */
 
