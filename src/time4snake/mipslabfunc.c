@@ -2,6 +2,9 @@
    This file written 2015 by F Lundevall
    Some parts are original code written by Axel Isaksson
 
+   This file modified 2021-12-14 by Joakim Abdinur Iusuf
+   This file modified 2021-12-14 by Edvin Nordling
+
    For copyright and licensing, see file COPYING */
 
 #include <stdint.h>   /* Declarations of uint_32 and the like */

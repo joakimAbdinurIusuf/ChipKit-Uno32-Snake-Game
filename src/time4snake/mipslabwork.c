@@ -5,9 +5,9 @@
 
    This file should be changed by YOU! So you must
    add comment(s) here with your name(s) and date(s):
-
-   This file modified 2017-04-31 by Ture Teknolog
-   This file modified 2021-10-07 by Joakim Abdinur Iusuf
+   
+   This file modified 2021-12-14 by Joakim Abdinur Iusuf
+   This file modified 2021-12-14 by Edvin Nordling
 
    For copyright and licensing, see file COPYING */
 
