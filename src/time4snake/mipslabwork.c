@@ -63,14 +63,7 @@ Lab-specific initialization goes here.
 */
 void labinit(void)
 {
-  // 1c) 
-  volatile int* trise = (volatile int*) 0xbf886100; 
-  *trise = (*trise) & 0xffffff00; 
-  PORTE=0;
-  // 1e)
-  // 0000 1111 1110 0000 -> 0x0fe0
   TRISD = TRISD | 0xfe0;
-
 
   // 2b) Se page 9 i Timer manualen.
   T2CON = 0x70; // Set bit 4-6 to 111 -> 0000...0111 0000 -> 0x70 and set on bit to 0
