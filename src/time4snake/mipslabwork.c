@@ -5,7 +5,7 @@
 
    This file should be changed by YOU! So you must
    add comment(s) here with your name(s) and date(s):
-   
+
    This file modified 2021-12-14 by Joakim Abdinur Iusuf
    This file modified 2021-12-14 by Edvin Nordling
 
@@ -95,7 +95,7 @@ void setAllElementsOfSnakeArrayToZero(void) {
 }
 
 /*
-Jocke.
+Jocke and Edvin.
 Start by setting all the elements in the snake array to zero.
 In drawSnakeAndRat, values that are not zero will be drawn.
 So set xPos to width/2 and yPos to height/2 to draw the snake in the 
@@ -248,7 +248,7 @@ int snakeCollidedWithItself() {
 }
 
 /*
-Jocke.
+Jocke and Edvin.
 Called in moveWest, moveEast, moveNorth and moveSouth. Check the cases where the 
 snake dies, i.e. when it hits a wall or itself.
 */
@@ -336,7 +336,7 @@ void displayGameOverScreen(void) {
 }
 
 /*
-Jocke.
+Jocke and Edvin.
 Start a new game by initializing the snake and setting rat exists to 0.
 */
 void startNewGame(void) {
@@ -349,7 +349,7 @@ void startNewGame(void) {
 }
 
 /*
-Jocke.
+Jocke och Edvin.
 Continuously move the snake in a certain direction, or move it in a new
 direction when BTN4 and BTN3 is pressed.
 
