@@ -23,6 +23,8 @@ static void num32asc( char * s, int );
 #define DISPLAY_TURN_OFF_VDD (PORTFSET = 0x40)
 #define DISPLAY_TURN_OFF_VBAT (PORTFSET = 0x20)
 
+int seed = 12345; //should be less than 65537 (m)
+
 /* Our functions  */
 
 /*
@@ -88,7 +90,6 @@ Edvin.
 Gives a sequence of random numbers, one new number everytime it's called. Not very advanced,
 but good enough for this snake game. (Sequence repeats when the program restarts.)
 */
-int seed = 12345; //should be less than 65537 (m)
 int rand(){
   seed++;
   int m = 2<<15 + 1;

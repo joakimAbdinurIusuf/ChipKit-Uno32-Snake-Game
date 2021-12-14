@@ -15,7 +15,6 @@
 #include <pic32mx.h>  /* Declarations of system-specific addresses etc */
 #include "mipslab.h"  /* Declatations for these labs */
 
-
 // Dimensions of the game field (see snakeArray) where each coordinate is 4*4 pixels.
 #define height 8
 #define width 32
@@ -61,8 +60,7 @@ void user_isr(void) {
 Jocke and Edvin.
 Lab-specific initialization goes here.
 */
-void labinit(void)
-{
+void labinit(void) {
   TRISD = TRISD | 0xfe0;
 
   // 2b) Se page 9 i Timer manualen.
@@ -120,7 +118,7 @@ void initializeSnake(void) {
 }
 
 /*
-Jocke.
+Jocke and Edvin.
 Draw the snake. Loop through the entire snake array. If it isn't 0,
 the block at snakeArray[i][j] is either the snake (values greater than zero),
 or a rat (value of -1). We then draw a white block in this positions. 
@@ -242,7 +240,6 @@ If the position of the head is greater than 0, it has collided with itself,
 unless it's the tail. (The tail will move next frame so the coordinate is up for grabs in that case.)
 */
 int snakeCollidedWithItself() {
-
   if (snakeArray[yPos][xPos] > 0 & snakeArray[yPos][xPos] != tail) { // A snake bodypart is at these coordinates, but not the tail.
     return 1;
   } else {
@@ -415,9 +412,13 @@ void moveSnake(void) {
   }
 }
 
+/*
+Edvin.
+Spawn the rat in a random position.
+*/
 void rat(){
   while(!ratExists){
-    int xRat = rand() % 32; // add time function later?
+    int xRat = rand() % 32; 
     int yRat = rand() % 8;
     if(snakeArray[yRat][xRat]==0){
       snakeArray[yRat][xRat]=-1;
@@ -426,6 +427,12 @@ void rat(){
   }
 }
 
+/*
+Edvin and Jocke.
+Check if the position of the snakes head is the same as that of the rat.
+If it is, increase the score and check to the if the current score is a new high score.
+Otherwise, simply remove the tail. This function is called each time the snake moves.
+*/
 void checkRat() {
   if(snakeArray[yPos][xPos] == -1) {
     score++;
@@ -438,9 +445,6 @@ void checkRat() {
     removeTail();
   }
 }
-
-
-
 
 /*
 Jocke.
@@ -498,12 +502,15 @@ void readButtons(){
 /* 
 Jocke and Edvin.
 This function is called repetitively from the main program.
+
 It uses a timer, and the timer has to time out a certain amount of times
 before the game logic runs once. The loop then resets and the timer has to
 go out the same amount of times again.
-*/
-void labwork( void ) {
 
+A better name for the function would be gameLoop but because of
+dependencies we will keep its' original name.
+*/
+void labwork(void) {
   int timerHasElapsed = IFS(0) & 0x100; // 16 bit timers
 
   if (gameOver) {
