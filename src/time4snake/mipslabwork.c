@@ -15,8 +15,20 @@
 #include <pic32mx.h>  /* Declarations of system-specific addresses etc */
 #include "mipslab.h"  /* Declatations for these labs */
 
+// Dimensions of the game field (see snakeArray) where each coordinate is 4*4 pixels.
 #define height 8
 #define width 32
+
+// The directions the snake can be facing.
+#define west 0
+#define north 1
+#define east 2
+#define south 3
+
+// The directions the snake can be turning.
+#define left 0
+#define forward 1
+#define right 2
 
 /* Global variables */
 int snakeArray[height][width], xPos, yPos, temp, head, tail, direction;
@@ -28,6 +40,13 @@ int gameOver;
 int timeoutcount, gameOverCount;
 
 int score, highscore;
+
+
+int turnDirection = forward;
+int prevBTN4 = 0;
+int prevBTN3 = 0;
+
+int timeoutcount;
 
 /* 
 Jocke and Edvin.
@@ -41,23 +60,15 @@ void user_isr(void) {
 Jocke and Edvin.
 Lab-specific initialization goes here.
 */
-void labinit(void)
-{
-  // 1c) 
-  volatile int* trise = (volatile int*) 0xbf886100; 
-  *trise = (*trise) & 0xffffff00; 
-  
-  // 1e)
-  // 0000 1111 1110 0000 -> 0x0fe0
+void labinit(void) {
   TRISD = TRISD | 0xfe0;
-
 
   // 2b) Se page 9 i Timer manualen.
   T2CON = 0x70; // Set bit 4-6 to 111 -> 0000...0111 0000 -> 0x70 and set on bit to 0
 
   int clockRate = 80000000; //80MHz
   int scale = 256;
-  int periodms = 10;
+  int periodms = 30; // 10 gives time out about every 100ms
   PR2 = (clockRate / scale) / periodms;
   
   TMR2 = 0; // Reset timer
@@ -97,7 +108,7 @@ void initializeSnake(void) {
   temp = xPos;
   head = 5;
   tail = 1;
-  direction = 2; // initiate direction to be right (0 = left, 1 = up, 2 = right, 3 = down)
+  direction = east; // initiate direction to be east
 
   int i;
   for (i = 0; i < head; i++) {
@@ -150,7 +161,7 @@ We also check collision with the rat, itself and the walls.
 The value of head is incremented and the value of snakeArray[yPos][xPos] is set
 to head.
 */
-void moveLeft(void) {
+void moveWest(void) {
   xPos--;
   head++;
   gameOverOrCheckRat();
@@ -163,7 +174,7 @@ We also check collision with the rat, itself and the walls.
 The value of head is incremented and the value of snakeArray[yPos][xPos] is set
 to head.
 */
-void moveRight(void) {
+void moveEast(void) {
   xPos++;
   head++;
   gameOverOrCheckRat();
@@ -176,7 +187,7 @@ We also check collision with the rat, itself and the walls.
 The value of head is incremented and the value of snakeArray[yPos][xPos] is set
 to head.
 */
-void moveUp(void) {
+void moveNorth(void) {
   yPos--;
   head++;
   gameOverOrCheckRat();
@@ -189,7 +200,7 @@ We also check collision with the rat, itself and the walls.
 The value of head is incremented and the value of snakeArray[yPos][xPos] is set
 to head.
 */
-void moveDown(void) {
+void moveSouth(void) {
   yPos++;
   head++;
   gameOverOrCheckRat();
@@ -210,13 +221,13 @@ void gameOverOrCheckRat(void) {
 }
 
 /*
-Jocke.
-Valid x-positions range from 0 to 31 (inclusive). So if xPos
-is less than 0 or greater than 31 the snake is outside of the screen.
+Jocke and Edvin.
+Valid y-positions range from 0 to 7 (inclusive), and valid x-positions range from 0 to 31 (inclusive).
+So if yPos is less than 0 or greater than 7, or if xPos is less than 0 or greater than 31 the snake is outside of the screen.
 This means it has hit a wall and should die.
 */
-int hitSideWall() {
-  if (xPos < 0 || xPos > 31) {
+int hitsWall() {
+  if (xPos < 0 || xPos > 31 || yPos < 0 || yPos > 7) {
     return 1;
   } else {
     return 0;
@@ -224,25 +235,12 @@ int hitSideWall() {
 }
 
 /*
-Jocke.
-Valid y-positions range from 0 to 7 (inclusive). So if yPos
-is less than 0 or greater than 7 the snake is outside of the screen.
-This means it has hit a wall and should die.
-*/
-int hitUpperOrLowerWall() {
-  if (yPos < 0 || yPos > 7) {
-    return 1;
-  } else {
-    return 0;
-  }
-}
-
-/*
-Jocke.
-If the position of the head is greater than 0, it has collided with itself.
+Jocke and Edvin.
+If the position of the head is greater than 0, it has collided with itself,
+unless it's the tail. (The tail will move next frame so the coordinate is up for grabs in that case.)
 */
 int snakeCollidedWithItself() {
-  if (snakeArray[yPos][xPos] > 0) { 
+  if (snakeArray[yPos][xPos] > 0 & snakeArray[yPos][xPos] != tail) { // A snake bodypart is at these coordinates, but not the tail.
     return 1;
   } else {
     return 0;
@@ -251,11 +249,11 @@ int snakeCollidedWithItself() {
 
 /*
 Jocke.
-Called in moveLeft, moveRight, moveUp and moveDown. Check the cases where the 
+Called in moveWest, moveEast, moveNorth and moveSouth. Check the cases where the 
 snake dies, i.e. when it hits a wall or itself.
 */
 int checkGameOver() {
-  if (hitSideWall() || hitUpperOrLowerWall() || snakeCollidedWithItself()) {
+  if (hitsWall() || snakeCollidedWithItself()) {
     return 1;
   } else {
     return 0;
@@ -347,6 +345,7 @@ void startNewGame(void) {
   ratExists = 0;
   score = 0;
   rat();
+  turnDirection = forward;
 }
 
 /*
@@ -365,58 +364,50 @@ BTN4 should move the snake upwards (its' left) and pressing BTN3 should move it 
 (its' right).
 
 If the direction is equal to 2, it will check three conditions (the same thing applies
-in the other directions). If BTN4 is pressed, we call moveUp() and change the direction to
-1 (up). If BTN3 is pressed, we call moveDown() and change the direction to 3. Otherwise
+in the other directions). If BTN4 is pressed, we call moveNorth() and change the direction to
+1 (up). If BTN3 is pressed, we call moveSouth() and change the direction to 3. Otherwise
 it will simply keep moving to the right. 
 */
 void moveSnake(void) {
-  int left = 0;
-  int up = 1;
-  int right = 2;
-  int down = 3;
-
-  int BTN4 = (getbtns() >> 2) & 0x1;
-  int BTN3 = (getbtns() >> 1) & 0x1;
-
-  if (direction == left) { 
-    if (BTN4) {
-      moveDown();
-      direction = 3;
-    } else if (BTN3) {
-      moveUp();
-      direction = 1;
+  if (direction == west) { 
+    if (turnDirection == left) { //BTN4 left
+      direction = south;
+      moveSouth();    
+    } else if (turnDirection == right) { //BTN3 right
+      direction = north;
+      moveNorth();      
     } else {
-      moveLeft();
+      moveWest();
     }
-  } else if (direction == up) { 
-    if (BTN4) {
-      moveLeft();
-      direction = 0;
-    } else if (BTN3) {
-      moveRight();
-      direction = 2;
+  } else if (direction == north) { 
+    if (turnDirection == left) {
+      direction = west;
+      moveWest();      
+    } else if (turnDirection == right) {
+      direction = east;
+      moveEast();      
     } else {
-      moveUp();
+      moveNorth();
     }
-  } else if (direction == right) { 
-    if (BTN4) {
-      moveUp();
-      direction = 1;
-    } else if (BTN3) {
-      moveDown();
-      direction = 3;
+  } else if (direction == east) { 
+    if (turnDirection == left) {
+      direction = north;
+      moveNorth();      
+    } else if (turnDirection == right) {
+      direction = south;
+      moveSouth();      
     } else {
-      moveRight();
+      moveEast();
     }
-  } else if (direction == down) {
-    if (BTN4) {
-      moveRight();
-      direction = 2;
-    } else if (BTN3) {
-      moveLeft();
-      direction = 0;
+  } else if (direction == south) {
+    if (turnDirection == left) {
+      direction = east;
+      moveEast();      
+    } else if (turnDirection == right) {
+      direction = west;
+      moveWest();
     } else {
-      moveDown();
+      moveSouth();
     }
   }
 }
@@ -474,10 +465,48 @@ void displayStartScreen(void) {
   buttonNotPressed = 1;
 }
 
+/*
+Edvin
+Rising edge occurs if the button is pressed but wasn't pressed last time it was checked.
+*/
+int buttonRisingEdge(BTN,prevBTN){
+  if(!prevBTN){
+    if(BTN){
+      return 1;
+    }
+  }
+  return 0;
+}
+
+
+/*
+Edvin
+Reads the current value of buttons 3 and 4, and change turnDirection variable if the button is on rising edge.
+Also saves the value for next read, so that rising edge can be checked.
+*/
+void readButtons(){
+  int BTN4 = (getbtns() >> 2) & 0x1; //Read BTN4 1 or 0
+  int BTN3 = (getbtns() >> 1) & 0x1; //Read BTN3 1 or 0
+
+  if(buttonRisingEdge(BTN3,prevBTN3)){
+    turnDirection = right;
+  }
+  if(buttonRisingEdge(BTN4, prevBTN4)){
+    turnDirection = left;
+  }
+  prevBTN3 = BTN3;
+  prevBTN4 = BTN4;
+}
+
 
 /* 
 Jocke and Edvin.
 This function is called repetitively from the main program.
+
+It uses a timer, and the timer has to time out a certain amount of times
+before the game logic runs once. The loop then resets and the timer has to
+go out the same amount of times again.
+
 A better name for the function would be gameLoop but because of
 dependencies we will keep its' original name.
 */
@@ -486,24 +515,29 @@ void labwork(void) {
 
   if (gameOver) {
     if (timerHasElapsed) {
-      gameOverCount++;
-      IFS(0) = IFS(0) & 0xFFFFFEFF;
+      gameOverCount++; //a time out count for the game over screen
+      IFS(0) = IFS(0) & 0xFFFFFEFF; // reset timer
+
       displayGameOverScreen();
-      if (gameOverCount == 30) {
+      if (gameOverCount == 90) {
         displayStartScreen();
-        gameOverCount = 0;
+        gameOverCount = 0; // reset timer loop
       }
     }
   } else {
     if (timerHasElapsed) {
       timeoutcount++;
-      IFS(0) = IFS(0) & 0xFFFFFEFF;
-      if (timeoutcount == 2) {
+      IFS(0) = IFS(0) & 0xFFFFFEFF; // reset timer
+
+      readButtons();
+
+      if (timeoutcount == 6){
         clearScreen();
         moveSnake();
+        turnDirection = forward;
         drawSnakeAndRat();
         display_image(0, screen);
-        timeoutcount = 0;
+        timeoutcount = 0; // reset timer loop
       }
     }
   }

@@ -33,20 +33,21 @@ void checkRat();
 void setAllElementsOfSnakeArrayToZero(void);
 void initializeSnake(void);
 void removeTail(void);
-void moveLeft(void);
-void moveRight(void);
-void moveUp(void);
-void moveDown(void);
-int hitSideWall();
-int hitUpperOrLowerWall();
+void moveWest(void);
+void moveEast(void);
+void moveNorth(void);
+void moveSouth(void);
+int hitsWall();
 int snakeCollidedWithItself();
 int checkGameOver();
 void startNewGame(void);
 void moveSnake(void);
 void displayGameOverScreen(void);
+int buttonOnTurn(int,int);
 void startNewGame(void);
 void gameOverOrCheckRat(void);
 void displayStartScreen(void);
+
 
 /* Declare display_debug - a function to help debugging.
 
