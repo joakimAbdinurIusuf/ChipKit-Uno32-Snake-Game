@@ -166,7 +166,7 @@ We also check collision with the rat, itself and the walls.
 The value of head is incremented and the value of snakeArray[yPos][xPos] is set
 to head.
 */
-void moveLeft(void) {
+void moveWest(void) {
   xPos--;
   head++;
   gameOverOrCheckRat();
@@ -179,7 +179,7 @@ We also check collision with the rat, itself and the walls.
 The value of head is incremented and the value of snakeArray[yPos][xPos] is set
 to head.
 */
-void moveRight(void) {
+void moveEast(void) {
   xPos++;
   head++;
   gameOverOrCheckRat();
@@ -192,7 +192,7 @@ We also check collision with the rat, itself and the walls.
 The value of head is incremented and the value of snakeArray[yPos][xPos] is set
 to head.
 */
-void moveUp(void) {
+void moveNorth(void) {
   yPos--;
   head++;
   gameOverOrCheckRat();
@@ -205,7 +205,7 @@ We also check collision with the rat, itself and the walls.
 The value of head is incremented and the value of snakeArray[yPos][xPos] is set
 to head.
 */
-void moveDown(void) {
+void moveSouth(void) {
   yPos++;
   head++;
   gameOverOrCheckRat();
@@ -267,7 +267,7 @@ int snakeCollidedWithItself() {
 
 /*
 Jocke.
-Called in moveLeft, moveRight, moveUp and moveDown. Check the cases where the 
+Called in moveWest, moveEast, moveNorth and moveSouth. Check the cases where the 
 snake dies, i.e. when it hits a wall or itself.
 */
 int checkGameOver() {
@@ -382,50 +382,50 @@ BTN4 should move the snake upwards (its' left) and pressing BTN3 should move it 
 (its' right).
 
 If the direction is equal to 2, it will check three conditions (the same thing applies
-in the other directions). If BTN4 is pressed, we call moveUp() and change the direction to
-1 (up). If BTN3 is pressed, we call moveDown() and change the direction to 3. Otherwise
+in the other directions). If BTN4 is pressed, we call moveNorth() and change the direction to
+1 (up). If BTN3 is pressed, we call moveSouth() and change the direction to 3. Otherwise
 it will simply keep moving to the right. 
 */
 void moveSnake(void) {
   if (direction == west) { 
     if (turnDirection == left) { //BTN4 left
       direction = south;
-      moveDown();    
+      moveSouth();    
     } else if (turnDirection == right) { //BTN3 right
       direction = north;
-      moveUp();      
+      moveNorth();      
     } else {
-      moveLeft();
+      moveWest();
     }
   } else if (direction == north) { 
     if (turnDirection == left) {
       direction = west;
-      moveLeft();      
+      moveWest();      
     } else if (turnDirection == right) {
       direction = east;
-      moveRight();      
+      moveEast();      
     } else {
-      moveUp();
+      moveNorth();
     }
   } else if (direction == east) { 
     if (turnDirection == left) {
       direction = north;
-      moveUp();      
+      moveNorth();      
     } else if (turnDirection == right) {
       direction = south;
-      moveDown();      
+      moveSouth();      
     } else {
-      moveRight();
+      moveEast();
     }
   } else if (direction == south) {
     if (turnDirection == left) {
       direction = east;
-      moveRight();      
+      moveEast();      
     } else if (turnDirection == right) {
       direction = west;
-      moveLeft();
+      moveWest();
     } else {
-      moveDown();
+      moveSouth();
     }
   }
 }
