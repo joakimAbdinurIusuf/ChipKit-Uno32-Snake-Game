@@ -240,7 +240,7 @@ If the position of the head is greater than 0, it has collided with itself,
 unless it's the tail. (The tail will move next frame so the coordinate is up for grabs in that case.)
 */
 int snakeCollidedWithItself() {
-  if (snakeArray[yPos][xPos] > 0 & snakeArray[yPos][xPos] != tail) { // A snake bodypart is at these coordinates, but not the tail.
+  if (snakeArray[yPos][xPos] > 0 && snakeArray[yPos][xPos] != tail) { // A snake bodypart is at these coordinates, but not the tail.
     return 1;
   } else {
     return 0;
